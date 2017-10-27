@@ -14,21 +14,30 @@ import java.util.concurrent.ConcurrentHashMap;
 
 import java.util.Map;
 
+import harry.GoogleCloud;
+
 
 public class NLPBot extends TelegramLongPollingBot {
 
-    //define bot behaviour (this one just echoes your messages)
+    //define bot behaviour (does the google sentiment analysis on a message and returns the result)
 
     @Override
-    public void onUpdateReceived(Update update) {
+    public void onUpdateReceived(Update update) {        
         // We check if the update has a message and the message has text
         if (update.hasMessage() && update.getMessage().hasText()) {
-            SendMessage message = new SendMessage() // Create a SendMessage object with mandatory fields
-                    .setChatId(update.getMessage().getChatId())
-                    .setText(update.getMessage().getText());
+
+            GoogleCloud cloud = new GoogleCloud();
+
             try {
+                SendMessage message = new SendMessage();// Create a SendMessage object with mandatory fields
+                    message.setChatId(update.getMessage().getChatId());
+                    message.setText(cloud.getSent(update.getMessage().getText()));
+   
                 sendMessage(message); // Call method to send the message
+
             } catch (TelegramApiException e) {
+                e.printStackTrace();
+            } catch (java.lang.Exception e) {
                 e.printStackTrace();
             }
         }

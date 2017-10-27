@@ -8,10 +8,7 @@ import org.telegram.telegrambots.exceptions.TelegramApiException;
 import org.telegram.telegrambots.logging.BotLogger;
 import org.telegram.telegrambots.logging.BotsFileHandler;
 
-// import local classes
-
 import harry.NLPBot;
-import harry.GoogleCloud;
 
 public class NLP {
   public static void main(String... args) throws Exception {
@@ -27,12 +24,5 @@ public class NLP {
     } catch (TelegramApiException e) {
       e.printStackTrace();
     }
-
-    //google cloud test
-
-    GoogleCloud cloud = new GoogleCloud();
-
-    cloud.getSent();
-
   }
 }
