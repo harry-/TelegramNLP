@@ -27,3 +27,12 @@ If all goes well, this will create a .jar file in a subfolder named "target".
 Execution
 
 Execute the jar package: java -jar ./target/<your jar file>.jar
+
+
+Usage
+
+Send any message to the bot and he will tell you what google thinks about its "sentiment" and "magnitude" (sentiment analysis).
+
+Send the keyword "entity" to the bot to switch to entity analysis mode. All non keyword messages after that will be answered with the results of the google entity analysis.
+
+Switch back to sentiment analysis mode by sending the keyword "sentiment".

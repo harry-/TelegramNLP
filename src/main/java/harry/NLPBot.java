@@ -19,48 +19,62 @@ import harry.GoogleCloud;
 
 public class NLPBot extends TelegramLongPollingBot {
 
-    //define bot behaviour (does the google sentiment analysis on a message and returns the result)
+  private String mode = "sentiment";
 
-    @Override
-    public void onUpdateReceived(Update update) {        
-        // We check if the update has a message and the message has text
-        if (update.hasMessage() && update.getMessage().hasText()) {
+  //define bot behaviour (does the google sentiment analysis on a message and returns the result)
 
-            GoogleCloud cloud = new GoogleCloud();
+  @Override
+  public void onUpdateReceived(Update update) {        
+    // We check if the update has a message and the message has text
+    if (update.hasMessage() && update.getMessage().hasText()) {
 
-            try {
-                SendMessage message = new SendMessage();// Create a SendMessage object with mandatory fields
-                    message.setChatId(update.getMessage().getChatId());
-                    message.setText(cloud.getSent(update.getMessage().getText()));
-   
-                sendMessage(message); // Call method to send the message
+      if (update.getMessage().getText().equals("entity")) 
+        mode="entity";
+      
+      else if (update.getMessage().getText().equals("sentiment")) 
+        mode="sentiment";
+            
+      else {
+        GoogleCloud cloud = new GoogleCloud();
 
-            } catch (TelegramApiException e) {
-                e.printStackTrace();
-            } catch (java.lang.Exception e) {
-                e.printStackTrace();
-            }
+        try {
+          SendMessage message = new SendMessage();// Create a SendMessage object with mandatory fields
+          message.setChatId(update.getMessage().getChatId());
+
+          if (mode.equals("sentiment"))
+             message.setText(cloud.getSent(update.getMessage().getText()));
+          if (mode.equals("entity"))
+            message.setText(cloud.getEnt(update.getMessage().getText()));
+       
+          sendMessage(message); // Call method to send the message
+
+        } catch (TelegramApiException e) {
+          e.printStackTrace();
+        } catch (java.lang.Exception e) {
+          e.printStackTrace();
         }
+      }
     }
+  }
 
-    //import bot credentials from environment variables
+  //import bot credentials from environment variables
 
-    @Override
-    public String getBotUsername() {
+  @Override
+  public String getBotUsername() {
    
-        Map<String, String> env = System.getenv();
-        String value = (String) env.get("TELEGRAM_BOT");
+    Map<String, String> env = System.getenv();
+    String value = (String) env.get("TELEGRAM_BOT");
 
-        return value;
-    }
+    return value;
+  }
 
-    @Override
-    public String getBotToken() {
+  @Override
+  public String getBotToken() {
     
-        Map<String, String> env = System.getenv();
-        String value = (String) env.get("TELEGRAM_TOKEN");
+    Map<String, String> env = System.getenv();
+    String value = (String) env.get("TELEGRAM_TOKEN");
 
-        return value;
-    }
+    return value;
+  }
 
 }
