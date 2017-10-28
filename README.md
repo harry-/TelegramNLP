@@ -31,8 +31,10 @@ Execute the jar package: java -jar ./target/<your jar file>.jar
 
 Usage
 
-Send any message to the bot and he will tell you what google thinks about its "sentiment" and "magnitude" (sentiment analysis).
+Send any message to the bot and it will tell you what google thinks about its "sentiment" and "magnitude" (sentiment analysis).
 
 Send the keyword "entity" to the bot to switch to entity analysis mode. All non keyword messages after that will be answered with the results of the google entity analysis.
+
+Send the keyword "entities-sentiment" to the bot to switch to entities sentiment analysis mode.
 
 Switch back to sentiment analysis mode by sending the keyword "sentiment".

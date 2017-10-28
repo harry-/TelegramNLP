@@ -19,9 +19,9 @@ import harry.GoogleCloud;
 
 public class NLPBot extends TelegramLongPollingBot {
 
-  private String mode = "sentiment";
+  private String mode = "sentiment"; 
 
-  //define bot behaviour (does the google sentiment analysis on a message and returns the result)
+  //define bot behaviour 
 
   @Override
   public void onUpdateReceived(Update update) {        
@@ -33,6 +33,9 @@ public class NLPBot extends TelegramLongPollingBot {
       
       else if (update.getMessage().getText().equals("sentiment")) 
         mode="sentiment";
+
+      else if (update.getMessage().getText().equals("entities-sentiment")) 
+        mode="entities-sentiment";
             
       else {
         GoogleCloud cloud = new GoogleCloud();
@@ -43,8 +46,12 @@ public class NLPBot extends TelegramLongPollingBot {
 
           if (mode.equals("sentiment"))
              message.setText(cloud.getSent(update.getMessage().getText()));
+
           if (mode.equals("entity"))
             message.setText(cloud.getEnt(update.getMessage().getText()));
+
+          if (mode.equals("entities-sentiment"))
+            message.setText(cloud.getEntSent(update.getMessage().getText()));
        
           sendMessage(message); // Call method to send the message
 

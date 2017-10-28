@@ -78,4 +78,44 @@ public class GoogleCloud {
     }
     return answer;
   }
+
+  public String getEntSent(String... args) throws Exception {
+
+    String text = "";
+    String answer = "";
+
+    for (String s : args) {
+        text += s;
+    }
+
+    // [START entity_sentiment_text]
+    // Instantiate a beta client : com.google.cloud.language.v1beta2.LanguageServiceClient
+    try (LanguageServiceClient language = LanguageServiceClient.create()) {
+      Document doc = Document.newBuilder()
+          .setContent(text).setType(Type.PLAIN_TEXT).build();
+      AnalyzeEntitySentimentRequest request = AnalyzeEntitySentimentRequest.newBuilder()
+          .setDocument(doc)
+          .setEncodingType(EncodingType.UTF16).build();
+      // detect entity sentiments in the given string
+      AnalyzeEntitySentimentResponse response = language.analyzeEntitySentiment(request);
+      // aggregate the response
+      for (Entity entity : response.getEntitiesList()) {
+        answer += "\n\nEntity: " + entity.getName();
+        answer += "\nSalience: " + entity.getSalience();
+        answer += "\nSentiment: " + entity.getSentiment();
+        for (EntityMention mention : entity.getMentionsList()) {
+          answer += "\nBegin offset: " + mention.getText().getBeginOffset();
+          answer += "\nContent: " + mention.getText().getContent();
+          answer += "\nMagnitude: " + mention.getSentiment().getMagnitude();
+          answer += "\nSentiment score : " + mention.getSentiment().getScore();
+          answer += "\nType: " + mention.getType();
+        }
+      }
+       return answer;
+    }
+    // [END entity_sentiment_text]
+
+
+    
+  }
 }
