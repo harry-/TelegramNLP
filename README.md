@@ -14,6 +14,10 @@ export GOOGLE_APPLICATION_CREDENTIALS=~/<your jason file>
 export TELEGRAM_TOKEN=<your token>
 export TELEGRAM_BOT=<your bot name>
 
+Next install apache derby (http://db.apache.org/derby/papers/DerbyTut/ - complete at least topic 1 - install software and topic 3 - embedded derby). The apache derby database resides in the data folder. The following table has been created:
+
+create table entitysentiment (userid int, entity varchar(100), salience double, magnitude double, score double, data date);
+
 Finally you'll also need maven (https://maven.apache.org/) available on your system.
 
 

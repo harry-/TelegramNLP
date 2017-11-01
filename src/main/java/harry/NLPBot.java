@@ -28,6 +28,7 @@ public class NLPBot extends TelegramLongPollingBot {
     // We check if the update has a message and the message has text
     if (update.hasMessage() && update.getMessage().hasText()) {
 
+      // switches
       if (update.getMessage().getText().equals("entity")) 
         mode="entity";
       
@@ -36,23 +37,31 @@ public class NLPBot extends TelegramLongPollingBot {
 
       else if (update.getMessage().getText().equals("entities-sentiment")) 
         mode="entities-sentiment";
-            
+      
+      // commands that produce a reply
       else {
-        GoogleCloud cloud = new GoogleCloud();
-
         try {
           SendMessage message = new SendMessage();// Create a SendMessage object with mandatory fields
           message.setChatId(update.getMessage().getChatId());
 
-          if (mode.equals("sentiment"))
-             message.setText(cloud.getSent(update.getMessage().getText()));
+          // "normal" commands or whatever
+          if (update.getMessage().getText().equals("hello"))
+            message.setText("hello " + update.getMessage().getFrom().getUserName());
 
-          if (mode.equals("entity"))
-            message.setText(cloud.getEnt(update.getMessage().getText()));
+          // switch dependent commands that produce a reply
+          else { 
+            GoogleCloud cloud = new GoogleCloud();
 
-          if (mode.equals("entities-sentiment"))
-            message.setText(cloud.getEntSent(update.getMessage().getText()));
-       
+            if (mode.equals("sentiment"))
+               message.setText(cloud.getSent(update.getMessage().getText()));
+
+            else if (mode.equals("entity"))
+              message.setText(cloud.getEnt(update.getMessage().getText()));
+
+            else if (mode.equals("entities-sentiment"))
+              message.setText(cloud.getEntSent(update.getMessage().getText()));
+          }
+     
           sendMessage(message); // Call method to send the message
 
         } catch (TelegramApiException e) {
