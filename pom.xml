@@ -52,6 +52,12 @@
       <version>0.25.0-beta</version>
     </dependency>
 
+    <dependency>
+      <groupId>org.apache.derby</groupId>
+      <artifactId>derby</artifactId>
+      <version>10.8.3.0</version>
+    </dependency>
+
   </dependencies>
   
 </project>

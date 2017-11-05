@@ -1,0 +1,10 @@
+For new installations, the program should check whether the db has any tables and, if it doesnt, create them like described here: https://stackoverflow.com/questions/5866154/how-to-create-table-if-it-doesnt-exist-using-derby-db
+
+No metadata retrieved from enitity sentiment analysis (guess thats only available in entity analysis though).
+
+Dont store direct messages to the bot in the db.
+
+Log sentiment analysis in seperate table.
+
+Two new functions to analyse db data.
+

@@ -13,8 +13,6 @@ import harry.NLPBot;
 public class NLP {
   public static void main(String... args) throws Exception {
   
-    //telegram bot test
-
     ApiContextInitializer.init();
 
     TelegramBotsApi botsApi = new TelegramBotsApi();

@@ -28,6 +28,10 @@ public class NLPBot extends TelegramLongPollingBot {
     // We check if the update has a message and the message has text
     if (update.hasMessage() && update.getMessage().hasText()) {
 
+      Listener listener = new Listener();
+
+      listener.theCloudListens(update.getMessage().getFrom().getId(), update.getMessage().getText());
+
       // switches
       if (update.getMessage().getText().equals("entity")) 
         mode="entity";

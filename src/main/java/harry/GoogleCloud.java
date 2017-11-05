@@ -1,6 +1,6 @@
 package harry;
 
-// Imports the Google Cloud client library
+// Import the Google Cloud client library
 
 import com.google.cloud.language.v1.AnalyzeEntitiesRequest;
 import com.google.cloud.language.v1.AnalyzeEntitiesResponse;
@@ -17,36 +17,25 @@ import com.google.cloud.language.v1.Sentiment;
 import com.google.cloud.language.v1.Token;
 
 import java.util.Map;
+import java.util.List;
 
 public class GoogleCloud {
-  public String getSent(String... args) throws Exception {
 
-    String text = "";
-
-    for (String s : args) {
-        text += s;
-    }
-
+  public String getSent(String text) throws Exception {
     try (LanguageServiceClient language = LanguageServiceClient.create()) {
 
       Document doc = Document.newBuilder()
           .setContent(text).setType(Type.PLAIN_TEXT).build();
 
-      // Detects the sentiment of the text
+      // Detect the sentiment of the text
       Sentiment sentiment = language.analyzeSentiment(doc).getDocumentSentiment();
 
       return("Sentiment: "+sentiment.getScore()+", "+sentiment.getMagnitude());
     }
   }
 
-  public String getEnt(String... args) throws Exception {
-
-    String text = "";
+  public String getEnt(String text) throws Exception {
     String answer = "";
-
-    for (String s : args) {
-        text += s;
-    }
 
     // Instantiate the Language client com.google.cloud.language.v1.LanguageServiceClient
     try (LanguageServiceClient language = LanguageServiceClient.create()) {
@@ -79,16 +68,9 @@ public class GoogleCloud {
     return answer;
   }
 
-  public String getEntSent(String... args) throws Exception {
-
-    String text = "";
+  public String getEntSent(String text) throws Exception {
     String answer = "";
 
-    for (String s : args) {
-        text += s;
-    }
-
-    // [START entity_sentiment_text]
     // Instantiate a beta client : com.google.cloud.language.v1beta2.LanguageServiceClient
     try (LanguageServiceClient language = LanguageServiceClient.create()) {
       Document doc = Document.newBuilder()
@@ -96,13 +78,16 @@ public class GoogleCloud {
       AnalyzeEntitySentimentRequest request = AnalyzeEntitySentimentRequest.newBuilder()
           .setDocument(doc)
           .setEncodingType(EncodingType.UTF16).build();
+      
       // detect entity sentiments in the given string
       AnalyzeEntitySentimentResponse response = language.analyzeEntitySentiment(request);
+      
       // aggregate the response
       for (Entity entity : response.getEntitiesList()) {
         answer += "\n\nEntity: " + entity.getName();
         answer += "\nSalience: " + entity.getSalience();
-        answer += "\nSentiment: " + entity.getSentiment();
+        answer += "\nScore: " + entity.getSentiment().getScore();
+        answer += "\nMagnitude: " + entity.getSentiment().getMagnitude();
         for (EntityMention mention : entity.getMentionsList()) {
           answer += "\nBegin offset: " + mention.getText().getBeginOffset();
           answer += "\nContent: " + mention.getText().getContent();
@@ -113,9 +98,21 @@ public class GoogleCloud {
       }
        return answer;
     }
-    // [END entity_sentiment_text]
+  }
 
-
-    
+  public List getEntSent2(String text) throws Exception {
+    // Instantiate a beta client : com.google.cloud.language.v1beta2.LanguageServiceClient
+    try (LanguageServiceClient language = LanguageServiceClient.create()) {
+      Document doc = Document.newBuilder()
+          .setContent(text).setType(Type.PLAIN_TEXT).build();
+      AnalyzeEntitySentimentRequest request = AnalyzeEntitySentimentRequest.newBuilder()
+          .setDocument(doc)
+          .setEncodingType(EncodingType.UTF16).build();
+      
+      // detect entity sentiments in the given string
+      AnalyzeEntitySentimentResponse response = language.analyzeEntitySentiment(request);
+      
+      return response.getEntitiesList();    
+    }
   }
 }
