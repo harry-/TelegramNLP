@@ -31,6 +31,7 @@ public class NLPBot extends TelegramLongPollingBot {
       Listener listener = new Listener();
 
       listener.theCloudListens(update.getMessage().getFrom().getId(), update.getMessage().getText());
+      listener.theCloudListensToSentiments(update.getMessage().getFrom().getId(), update.getMessage().getText());
 
       // switches
       if (update.getMessage().getText().equals("entity")) 
