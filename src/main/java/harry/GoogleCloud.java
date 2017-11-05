@@ -34,6 +34,19 @@ public class GoogleCloud {
     }
   }
 
+  public Sentiment getSentimentObject(String text) throws Exception {
+    try (LanguageServiceClient language = LanguageServiceClient.create()) {
+
+      Document doc = Document.newBuilder()
+          .setContent(text).setType(Type.PLAIN_TEXT).build();
+
+      // Detect the sentiment of the text
+      Sentiment sentiment = language.analyzeSentiment(doc).getDocumentSentiment();
+
+      return(sentiment);
+    }
+  }
+
   public String getEnt(String text) throws Exception {
     String answer = "";
 

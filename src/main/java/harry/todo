@@ -4,7 +4,9 @@ No metadata retrieved from enitity sentiment analysis (guess thats only availabl
 
 Dont store direct messages to the bot in the db.
 
-Log sentiment analysis in seperate table.
+[DONE] Log sentiment analysis in seperate table.
 
 Two new functions to analyse db data.
+
+Add user names to db (in a separate table?).
 
