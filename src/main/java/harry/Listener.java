@@ -74,4 +74,10 @@ public class Listener {
       System.out.println(e.toString());
     }
   }
+
+  public void checkUser(int userid, String username, String firstname) {
+    DerbyDB db = new DerbyDB();
+    if (db.getUsername(userid) == null)
+      db.createUser(userid, username, firstname);
+  }
 }
