@@ -15,7 +15,7 @@ import java.util.concurrent.ConcurrentHashMap;
 import java.util.Map;
 
 import harry.GoogleCloud;
-
+import harry.Report;
 
 public class NLPBot extends TelegramLongPollingBot {
 
@@ -30,8 +30,6 @@ public class NLPBot extends TelegramLongPollingBot {
 
       Listener listener = new Listener();
 
-      listener.theCloudListens(update.getMessage().getFrom().getId(), update.getMessage().getText());
-      listener.theCloudListensToSentiments(update.getMessage().getFrom().getId(), update.getMessage().getText());
 
       // switches
       if (update.getMessage().getText().equals("entity")) 
@@ -46,12 +44,21 @@ public class NLPBot extends TelegramLongPollingBot {
       // commands that produce a reply
       else {
         try {
+
+          listener.theCloudListens(update.getMessage().getFrom().getId(), update.getMessage().getText());
+          listener.theCloudListensToSentiments(update.getMessage().getFrom().getId(), update.getMessage().getText());
+          
           SendMessage message = new SendMessage();// Create a SendMessage object with mandatory fields
           message.setChatId(update.getMessage().getChatId());
 
           // "normal" commands or whatever
           if (update.getMessage().getText().equals("hello"))
             message.setText("hello " + update.getMessage().getFrom().getUserName());
+
+          else if (update.getMessage().getText().equals("entity sentiment report")) {
+            Report report = new Report();
+            message.setText(report.entitySentiment());
+          }
 
           // switch dependent commands that produce a reply
           else { 

@@ -33,8 +33,6 @@ public class DerbyDB{
    
       // create table
       //stmt.executeUpdate("create table entitysentiment (index INTEGER NOT NULL GENERATED ALWAYS AS IDENTITY (START WITH 1, INCREMENT BY 1), userid int, entity varchar(100), salience double, magnitude double, score double, date date, metadata varchar(100))");
-
-      //stmt.executeUpdate("create table sentiment (index INTEGER NOT NULL GENERATED ALWAYS AS IDENTITY (START WITH 1, INCREMENT BY 1), userid int, magnitude double, score double, date date)");
    
       String sql = "insert into entitysentiment (userid, entity, salience, magnitude, score, date, metadata) values ("+userid+", '"+entity+"', "+salience+", "+magnitude+", "+score+", '"+date+"', '"+metadata+"')";
 
@@ -42,13 +40,6 @@ public class DerbyDB{
 
       stmt.executeUpdate(sql);
 
-      // query
-      ResultSet rs = stmt.executeQuery("SELECT * FROM entitysentiment");
-   
-      // print out query result
-      while (rs.next()) { 
-        System.out.printf("%d\t%s\n", rs.getInt("userid"), rs.getString("entity"));
-      }
     } catch (Exception e) {
       e.printStackTrace();
     }
@@ -76,5 +67,26 @@ public class DerbyDB{
     } catch (Exception e) {
       e.printStackTrace();
     }
+  }
+
+  public String getEntitySentimentData(String sort) throws SQLException {
+
+    String output = "";
+    String dbUrl = "jdbc:derby:data/nlpdb;create=true";
+    conn = DriverManager.getConnection(dbUrl);
+
+    try {
+      Statement stmt = conn.createStatement();
+   
+      ResultSet rs = stmt.executeQuery("SELECT  entity FROM entitysentiment ORDER BY (score*10)*(magnitude*10) "+sort);
+      rs.next();
+      output = rs.getString("entity");
+      /*while (rs.next()) { 
+        output += rs.getString("entity")+"\n";
+        }  */    
+    } catch (Exception e) {
+      e.printStackTrace();
+    }
+    return output;
   }
 }
