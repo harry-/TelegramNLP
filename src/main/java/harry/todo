@@ -1,12 +1,21 @@
 For new installations, the program should check whether the db has any tables and, if it doesnt, create them like described here: https://stackoverflow.com/questions/5866154/how-to-create-table-if-it-doesnt-exist-using-derby-db
 
-No metadata retrieved from enitity sentiment analysis (guess thats only available in entity analysis though).
+Rename the package.
+
+(No metadata retrieved from enitity sentiment analysis (guess thats only available in entity analysis though).
 
 Dont store direct messages to the bot in the db.
 
 [DONE] Log sentiment analysis in seperate table.
 
-Two new functions to analyse db data.
+[DONE] Add user names to db (in a separate table?).
 
-Add user names to db (in a separate table?).
+(Reporting from the command line.)
 
+(Twitter :^)
+
+Add categories as a table field (like [Work_Of_Art])
+
+The final report should be something like this: "Harry likes a, b and d. He dislikes e, f and g". He talks a lot about h. His favourite artist is i and his favourite work of art is j. He seems to generally be in a better mood than last week."
+
+Pronouns.

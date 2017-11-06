@@ -57,6 +57,8 @@ public class DerbyDB{
       // stmt.executeUpdate("Drop Table sentiment");
 
       //stmt.executeUpdate("create table sentiment (index INTEGER NOT NULL GENERATED ALWAYS AS IDENTITY (START WITH 1, INCREMENT BY 1), userid int, magnitude double, score double, date date)");
+
+      //stmt.executeUpdate("CREATE TABLE telegramuser (userid int, firstname varchar(40), secondname varchar(40), handle varchar(40))");
    
       String sql = "insert into sentiment (userid, magnitude, score, date) values ("+userid+", "+magnitude+", "+score+", '"+date+"')";
 
@@ -88,5 +90,51 @@ public class DerbyDB{
       e.printStackTrace();
     }
     return output;
+  }
+
+/**
+ * Retrieves the username corresponding to a given userid.
+ * Returns null if there is no entry.
+ */
+  public String getUsername(int userid) {
+    String dbUrl = "jdbc:derby:data/nlpdb;create=true";
+   
+    try {
+      conn = DriverManager.getConnection(dbUrl);
+      Statement stmt = conn.createStatement();
+
+      ResultSet rs = stmt.executeQuery("SELECT handle FROM telegramuser WHERE userid = "+userid);
+
+      if (rs.next()) 
+        return rs.getString("handle");
+          
+   
+      //stmt.executeUpdate("CREATE TABLE telegramuser (userid int, firstname varchar(40), secondname varchar(40), handle varchar(40))");
+
+    } catch (Exception e) {
+      e.printStackTrace();
+    }
+    return null;
+  }
+
+/**
+ * Creates a new User
+ */
+  public void createUser(int userid, String username, String firstname) {
+    String dbUrl = "jdbc:derby:data/nlpdb;create=true";
+   
+    try {
+      conn = DriverManager.getConnection(dbUrl);
+      Statement stmt = conn.createStatement();
+
+      String sql = "insert into telegramuser (userid, handle, firstname) values ("+userid+", '"+username+"', '"+firstname+"')";
+
+      System.out.println(sql);
+
+      stmt.executeUpdate(sql);
+
+    } catch (Exception e) {
+      e.printStackTrace();
+    }
   }
 }
