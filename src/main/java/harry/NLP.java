@@ -9,10 +9,17 @@ import org.telegram.telegrambots.logging.BotLogger;
 import org.telegram.telegrambots.logging.BotsFileHandler;
 
 import harry.NLPBot;
+import harry.DerbyDB;
+
 
 public class NLP {
   public static void main(String... args) throws Exception {
   
+    //Initialize the database
+  	//DerbyDB db = new DerbyDB();
+  	DerbyDB db = new DerbyDB();
+  	db.initializeTables();
+
     ApiContextInitializer.init();
 
     TelegramBotsApi botsApi = new TelegramBotsApi();
