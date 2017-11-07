@@ -31,7 +31,8 @@ public class Listener {
         answer += ", Salience: " + entity.getSalience();
         answer += ", Score: " + entity.getSentiment().getScore();
         answer += ", Magnitude: " + entity.getSentiment().getMagnitude();
- 
+        answer += ", Type: " + entity.getType().name();
+
         System.out.println(answer);
 
         db.storeAnalysis(userID,
@@ -39,7 +40,8 @@ public class Listener {
           entity.getSalience(), 
           entity.getSentiment().getMagnitude(), 
           entity.getSentiment().getScore(), 
-          date, "");
+          date, "",
+          entity.getType().name());
       }
     } catch (SQLException sqle) {
       System.out.println(sqle.toString());
