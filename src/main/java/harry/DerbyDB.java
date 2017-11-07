@@ -20,7 +20,7 @@ public class DerbyDB{
     conn = DriverManager.getConnection(dbUrl);
   }
 
-  public void storeAnalysis(int userid, String entity, double salience, double magnitude, double score, LocalDate date, String metadata) throws SQLException {
+  public void storeAnalysis(int userid, String entity, double salience, double magnitude, double score, LocalDate date, String metadata, String type) throws SQLException {
 
     String dbUrl = "jdbc:derby:data/nlpdb;create=true";
     conn = DriverManager.getConnection(dbUrl);
@@ -28,7 +28,7 @@ public class DerbyDB{
     try {
       Statement stmt = conn.createStatement();
    
-      String sql = "insert into entitysentiment (userid, entity, salience, magnitude, score, date, metadata) values ("+userid+", '"+entity+"', "+salience+", "+magnitude+", "+score+", '"+date+"', '"+metadata+"')";
+      String sql = "insert into entitysentiment (userid, entity, salience, magnitude, score, date, metadata, type) values ("+userid+", '"+entity+"', "+salience+", "+magnitude+", "+score+", '"+date+"', '"+metadata+"', '"+type+"')";
 
       System.out.println(sql);
 
@@ -128,7 +128,7 @@ public class DerbyDB{
   public void initializeTables() {
     createTable("CREATE TABLE telegramuser (userid int, firstname varchar(40), secondname varchar(40), handle varchar(40))");
     createTable("create table sentiment (index INTEGER NOT NULL GENERATED ALWAYS AS IDENTITY (START WITH 1, INCREMENT BY 1), userid int, magnitude double, score double, date date)");
-    createTable("create table entitysentiment (index INTEGER NOT NULL GENERATED ALWAYS AS IDENTITY (START WITH 1, INCREMENT BY 1), userid int, entity varchar(100), salience double, magnitude double, score double, date date, metadata varchar(100))");
+    createTable("create table entitysentiment (index INTEGER NOT NULL GENERATED ALWAYS AS IDENTITY (START WITH 1, INCREMENT BY 1), userid int, entity varchar(100), salience double, magnitude double, score double, date date, metadata varchar(100), type varchar(40))");
   }
 
 /**
