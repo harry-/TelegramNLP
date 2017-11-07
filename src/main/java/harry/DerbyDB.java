@@ -28,12 +28,6 @@ public class DerbyDB{
     try {
       Statement stmt = conn.createStatement();
    
-      // drop table
-      // stmt.executeUpdate("Drop Table entitysentiment");
-   
-      // create table
-      //stmt.executeUpdate("create table entitysentiment (index INTEGER NOT NULL GENERATED ALWAYS AS IDENTITY (START WITH 1, INCREMENT BY 1), userid int, entity varchar(100), salience double, magnitude double, score double, date date, metadata varchar(100))");
-   
       String sql = "insert into entitysentiment (userid, entity, salience, magnitude, score, date, metadata) values ("+userid+", '"+entity+"', "+salience+", "+magnitude+", "+score+", '"+date+"', '"+metadata+"')";
 
       System.out.println(sql);
@@ -52,13 +46,6 @@ public class DerbyDB{
 
     try {
       Statement stmt = conn.createStatement();
-   
-      // drop table
-      // stmt.executeUpdate("Drop Table sentiment");
-
-      //stmt.executeUpdate("create table sentiment (index INTEGER NOT NULL GENERATED ALWAYS AS IDENTITY (START WITH 1, INCREMENT BY 1), userid int, magnitude double, score double, date date)");
-
-      //stmt.executeUpdate("CREATE TABLE telegramuser (userid int, firstname varchar(40), secondname varchar(40), handle varchar(40))");
    
       String sql = "insert into sentiment (userid, magnitude, score, date) values ("+userid+", "+magnitude+", "+score+", '"+date+"')";
 
@@ -107,9 +94,6 @@ public class DerbyDB{
 
       if (rs.next()) 
         return rs.getString("handle");
-          
-   
-      //stmt.executeUpdate("CREATE TABLE telegramuser (userid int, firstname varchar(40), secondname varchar(40), handle varchar(40))");
 
     } catch (Exception e) {
       e.printStackTrace();
@@ -135,6 +119,49 @@ public class DerbyDB{
 
     } catch (Exception e) {
       e.printStackTrace();
+    }
+  }
+
+/**
+ * Create db structure on first run
+ */
+  public void initializeTables() {
+    createTable("CREATE TABLE telegramuser (userid int, firstname varchar(40), secondname varchar(40), handle varchar(40))");
+    createTable("create table sentiment (index INTEGER NOT NULL GENERATED ALWAYS AS IDENTITY (START WITH 1, INCREMENT BY 1), userid int, magnitude double, score double, date date)");
+    createTable("create table entitysentiment (index INTEGER NOT NULL GENERATED ALWAYS AS IDENTITY (START WITH 1, INCREMENT BY 1), userid int, entity varchar(100), salience double, magnitude double, score double, date date, metadata varchar(100))");
+  }
+
+/**
+ * Check if SQLException was "Table doesnt exist"
+ */
+  public boolean tableAlreadyExists(SQLException e) {
+    boolean exists;
+    if(e.getSQLState().equals("X0Y32")) {
+        exists = true;
+    } else {
+        exists = false;
+    }
+    return exists;
+  }
+
+/**
+ * Create a new table, unless it already exists
+ */
+  public void createTable(String sql) {
+    String dbUrl = "jdbc:derby:data/nlpdb;create=true";
+
+    try {
+      conn = DriverManager.getConnection(dbUrl);
+      Statement stmt = conn.createStatement();
+      stmt.executeUpdate(sql);
+    } catch (SQLException e) {
+      if(tableAlreadyExists(e)) { //check if the exception is because of pre-existing table.
+          System.out.println("Table already exists.  No need to recreate");
+      } else {
+          System.out.println(e.getMessage() + " : " + e.getStackTrace());
+      }
+    } finally {
+        // the connection should be closed here
     }
   }
 }
