@@ -15,11 +15,13 @@ import java.util.concurrent.ConcurrentHashMap;
 import java.util.Map;
 
 import harry.GoogleCloud;
-import harry.Report;
+
 
 public class NLPBot extends TelegramLongPollingBot {
 
   private String mode = "sentiment"; 
+
+
 
   //define bot behaviour 
 
