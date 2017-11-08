@@ -7,6 +7,7 @@ import java.sql.SQLException;
 import java.sql.Statement;
 
 import java.time.LocalDate;
+
  
 public class DerbyDB{
   Connection conn;
@@ -58,21 +59,33 @@ public class DerbyDB{
     }
   }
 
-  public String getEntitySentimentData(String sort) throws SQLException {
+/**
+ * Retrieve top rated entries from entitysentiment
+ * Returns null if there is no entry.
+ *
+ * @param store   either ASC or DESC
+ * @param top     get the first [top] results of the query 
+ * @return entity names as an array of strings
+ */
+  public String[] getEntitySentimentData(String sort, int top) throws SQLException {
 
-    String output = "";
     String dbUrl = "jdbc:derby:data/nlpdb;create=true";
     conn = DriverManager.getConnection(dbUrl);
+
+    String[] output = new String[top];
 
     try {
       Statement stmt = conn.createStatement();
    
-      ResultSet rs = stmt.executeQuery("SELECT  entity FROM entitysentiment ORDER BY (score*10)*(magnitude*10) "+sort);
-      rs.next();
-      output = rs.getString("entity");
-      /*while (rs.next()) { 
-        output += rs.getString("entity")+"\n";
-        }  */    
+      ResultSet rs = stmt.executeQuery("SELECT entity FROM entitysentiment ORDER BY (score*10)*(magnitude*10)*(salience*100) "+sort+" FETCH NEXT "+top+" ROWS ONLY");
+      //SELECT  entity, (score*100)*(magnitude*100), (score*100)*(magnitude*100)*(salience*100) as SxMxS FROM entitysentiment ORDER BY (score*10)*(magnitude*10) ASC FETCH NEXT 3 ROWS ONLY
+     
+   
+      int idx = 0;
+      while (rs.next()) { 
+        output[idx] = rs.getString("entity");
+        idx++;
+        }     
     } catch (Exception e) {
       e.printStackTrace();
     }
@@ -80,7 +93,7 @@ public class DerbyDB{
   }
 
 /**
- * Retrieves the username corresponding to a given userid.
+ * Retrieve the username corresponding to a given userid.
  * Returns null if there is no entry.
  */
   public String getUsername(int userid) {
