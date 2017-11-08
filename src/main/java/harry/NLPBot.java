@@ -67,8 +67,8 @@ public class NLPBot extends TelegramLongPollingBot {
             message.setText(report.entitySentiment());
           }
 
-          // switch dependent commands that produce a reply
-          else { 
+          // switch dependent commands that produce a reply (only in private chat)
+          else if (update.getMessage().getChat().isUserChat()){ 
             GoogleCloud cloud = new GoogleCloud();
 
             if (mode.equals("sentiment"))
@@ -80,8 +80,8 @@ public class NLPBot extends TelegramLongPollingBot {
             else if (mode.equals("entities-sentiment"))
               message.setText(cloud.getEntSent(update.getMessage().getText()));
           }
-     
-          sendMessage(message); // Call method to send the message
+          if (message.getText() != null && !message.getText().isEmpty())
+            sendMessage(message); // Call method to send the message
 
         } catch (TelegramApiException e) {
           e.printStackTrace();

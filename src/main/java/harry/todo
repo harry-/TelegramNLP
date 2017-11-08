@@ -14,7 +14,7 @@ Dont store direct messages to the bot in the db.
 
 (Twitter :^)
 
-Add categories as a table field (like [Work_Of_Art])
+[done]Add categories as a table field (like [Work_Of_Art])
 
 The final report should be something like this: "Harry likes a, b and d. He dislikes e, f and g". He talks a lot about h. His favourite artist is i and his favourite work of art is j. He seems to generally be in a better mood than last week."
 
