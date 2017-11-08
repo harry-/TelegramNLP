@@ -1,4 +1,4 @@
-For new installations, the program should check whether the db has any tables and, if it doesnt, create them like described here: https://stackoverflow.com/questions/5866154/how-to-create-table-if-it-doesnt-exist-using-derby-db
+[DONE] For new installations, the program should check whether the db has any tables and, if it doesnt, create them like described here: https://stackoverflow.com/questions/5866154/how-to-create-table-if-it-doesnt-exist-using-derby-db
 
 Rename the package.
 
