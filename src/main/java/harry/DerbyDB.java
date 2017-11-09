@@ -94,6 +94,7 @@ public class DerbyDB{
  * @param top     get the first [top] results of the query 
  * @return entity names as an array of strings
  */
+
   public String[] getEntitySentimentData(String sort, int top, String user) throws IllegalArgumentException {
 
     String[] output = new String[top];
@@ -173,7 +174,7 @@ public class DerbyDB{
     try {
       Connection conn = connectionToDerby();
       Statement stmt = conn.createStatement();
-       
+
       String sql = "insert into telegramuser (userid, handle, firstname) values ("+userid+", '"+username+"', '"+firstname+"')";
 
       System.out.println(sql);
