@@ -165,7 +165,7 @@ public class DerbyDB{
  * Create db structure on first run
  */
   public void initializeTables() {
-    createTable("CREATE TABLE telegramuser (userid int, firstname varchar(40), secondname varchar(40), handle varchar(40))");
+    createTable("CREATE TABLE telegramuser (userid int, firstname varchar(40), secondname varchar(40), handle varchar(40), gender varchar(10))");
     createTable("create table sentiment (index INTEGER NOT NULL GENERATED ALWAYS AS IDENTITY (START WITH 1, INCREMENT BY 1), userid int, magnitude double, score double, date date)");
     createTable("create table entitysentiment (index INTEGER NOT NULL GENERATED ALWAYS AS IDENTITY (START WITH 1, INCREMENT BY 1), userid int, entity varchar(100), salience double, magnitude double, score double, date date, metadata varchar(100), type varchar(40))");
   }
