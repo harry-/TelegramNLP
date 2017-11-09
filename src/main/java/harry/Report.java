@@ -9,12 +9,9 @@ public class Report {
 		String[] fav = new String[3];
 		String[] worst  = new String[3];
 		DerbyDB db = new DerbyDB();
-		try {
-			worst = db.getEntitySentimentData("ASC", 3);
-			fav = db.getEntitySentimentData("DESC", 3);
-		} catch (SQLException sqle) {
-      System.out.println(sqle.toString());
-    }
+
+		worst = db.getEntitySentimentData("ASC", 3);
+		fav = db.getEntitySentimentData("DESC", 3);
 
     report = "You like "+fav[0]+", "+fav[1]+" and "+fav[2]+". You dislike "+worst[0]+", "+worst[1]+" and "+worst[2]+".";
 

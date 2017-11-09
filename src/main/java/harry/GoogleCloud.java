@@ -18,6 +18,8 @@ import com.google.cloud.language.v1.Token;
 
 import java.util.Map;
 import java.util.List;
+import java.util.ArrayList;
+import java.io.*;
 
 public class GoogleCloud {
 
@@ -34,17 +36,21 @@ public class GoogleCloud {
     }
   }
 
-  public Sentiment getSentimentObject(String text) throws Exception {
+  public Sentiment getSentimentObject(String text)  {
+    Sentiment sentiment = Sentiment.getDefaultInstance();
     try (LanguageServiceClient language = LanguageServiceClient.create()) {
 
       Document doc = Document.newBuilder()
           .setContent(text).setType(Type.PLAIN_TEXT).build();
 
       // Detect the sentiment of the text
-      Sentiment sentiment = language.analyzeSentiment(doc).getDocumentSentiment();
-
-      return(sentiment);
+      sentiment = language.analyzeSentiment(doc).getDocumentSentiment();
+    } catch (Exception e)
+    {
+      System.err.println("Really no idea, why the Google API throws a generic Exception here\n Error message: "+e.toString());
     }
+    return(sentiment);
+    
   }
 
   public String getEnt(String text) throws Exception {
@@ -81,7 +87,7 @@ public class GoogleCloud {
     return answer;
   }
 
-  public String getEntSent(String text) throws Exception {
+  public String getEntSent(String text) {
     String answer = "";
 
     // Instantiate a beta client : com.google.cloud.language.v1beta2.LanguageServiceClient
@@ -109,11 +115,19 @@ public class GoogleCloud {
           answer += "\nType: " + mention.getType();
         }
       }
-       return answer;
+    
+    } catch (IOException IOe)
+    {
+      System.err.println("Couldnt reach THE CLOUD probably\nError message: "+IOe.toString());
+    } catch (Exception e)
+    {
+      System.err.println("Really no idea, why the Google API throws a generic Exception here\n Error message: "+e.toString());
     }
+    return answer;    
   }
 
-  public List getEntSent2(String text) throws Exception {
+  public List getEntSent2(String text) {
+    List<Entity> entities = new ArrayList();
     // Instantiate a beta client : com.google.cloud.language.v1beta2.LanguageServiceClient
     try (LanguageServiceClient language = LanguageServiceClient.create()) {
       Document doc = Document.newBuilder()
@@ -124,8 +138,14 @@ public class GoogleCloud {
       
       // detect entity sentiments in the given string
       AnalyzeEntitySentimentResponse response = language.analyzeEntitySentiment(request);
-      
-      return response.getEntitiesList();    
+      entities = response.getEntitiesList();   
+    } catch (IOException IOe)
+    {
+      System.err.println("Couldnt reach THE CLOUD probably\nError message: "+IOe.toString());
+    } catch (Exception e)
+    {
+      System.err.println("Really no idea, why the Google API throws a generic Exception here\n Error message: "+e.toString());
     }
+    return entities;
   }
 }
