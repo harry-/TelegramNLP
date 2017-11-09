@@ -94,15 +94,17 @@ public class DerbyDB{
  * @param top     get the first [top] results of the query 
  * @return entity names as an array of strings
  */
-  public String[] getEntitySentimentData(String sort, int top) {
+  public String[] getEntitySentimentData(String sort, int top, String user) throws IllegalArgumentException {
 
     String[] output = new String[top];
 
     try {
       Connection conn = connectionToDerby();
       Statement stmt = conn.createStatement();
+
+      int userid = getUserId(user);
    
-      ResultSet rs = stmt.executeQuery("SELECT entity FROM entitysentiment ORDER BY (score*10)*(magnitude*10)*(salience*100) "+sort+" FETCH NEXT "+top+" ROWS ONLY");
+      ResultSet rs = stmt.executeQuery("SELECT entity FROM entitysentiment WHERE userid = "+userid+" ORDER BY (score*10)*(magnitude*10)*(salience*100) "+sort+" FETCH NEXT "+top+" ROWS ONLY");
       //SELECT  entity, (score*100)*(magnitude*100), (score*100)*(magnitude*100)*(salience*100) as SxMxS FROM entitysentiment ORDER BY (score*10)*(magnitude*10) ASC FETCH NEXT 3 ROWS ONLY
      
    
@@ -137,6 +139,30 @@ public class DerbyDB{
       e.printStackTrace();
     }
     return null;
+  }
+
+/**
+ * Retrieve the userid corresponding to a given handle.
+ * Returns 0 if there is no entry.
+ */
+  public int getUserId(String userhandle) {
+
+    try {
+      Connection conn = connectionToDerby();
+
+      Statement stmt = conn.createStatement();
+      String sql = "SELECT userid FROM telegramuser WHERE handle = '"+userhandle+"'";
+      System.out.println(sql);
+
+      ResultSet rs = stmt.executeQuery(sql);
+
+      if (rs.next()) 
+        return rs.getInt("userid");
+
+    } catch (SQLException e) {
+      e.printStackTrace();
+    }
+    throw new IllegalArgumentException( "User "+userhandle+" does not exist in database");
   }
 
 /**
