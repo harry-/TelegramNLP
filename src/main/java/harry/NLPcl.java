@@ -17,6 +17,6 @@ public class NLPcl {
   	}
 
 	Report report = new Report();
-    System.out.println(report.entitySentiment());
+    System.out.println(report.entitySentiment("jolieblonde"));
   }
 }
