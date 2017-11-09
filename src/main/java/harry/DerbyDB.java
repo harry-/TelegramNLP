@@ -8,25 +8,63 @@ import java.sql.Statement;
 
 import java.time.LocalDate;
 
- 
 public class DerbyDB{
-  Connection conn;
+
+  String dbUrl = "jdbc:derby:data/nlpdb";
  
-  public void connectionToDerby() throws SQLException {
-    // -------------------------------------------
-    // URL format is
-    // jdbc:derby:<local directory to save data>
-    // -------------------------------------------
-    String dbUrl = "jdbc:derby:data/nlpdb;create=true";
-    conn = DriverManager.getConnection(dbUrl);
+  public Connection connectionToDerby() throws SQLException {
+    Connection conn = null;
+    //String dbUrl = "jdbc:derby:data/nlpdb;create=true";
+    System.out.println("Connect to database");
+    try {      
+      conn = DriverManager.getConnection(dbUrl);       
+    } catch (SQLException sqle) {
+
+      if(sqle.getErrorCode()==40000) {
+        //https://db.apache.org/derby/docs/10.1/ref/rrefexcept71493.html
+        System.out.println("Database not found, try to create...");
+        conn = DriverManager.getConnection(dbUrl+";create=true");
+      }
+    } 
+    return conn;
   }
+
+  public void checkDB() throws SQLException {
+    Connection conn = null;
+    //String dbUrl = "jdbc:derby:data/nlpdb;create=true";
+    System.out.println("Connect to database");
+    try {      
+      conn = DriverManager.getConnection(dbUrl);       
+    } catch (SQLException sqle) {
+
+      if(sqle.getErrorCode()==40000) {
+        System.out.println("Database not found, try to create...");
+        conn = DriverManager.getConnection(dbUrl+";create=true");
+      }
+    } 
+  }
+
+  public void createDB() {
+    Connection conn = null;
+    //String dbUrl = "jdbc:derby:data/nlpdb;create=true";
+    System.out.println("Connect to database");
+    try {      
+      conn = DriverManager.getConnection(dbUrl);       
+    } catch (SQLException sqle) {
+
+      if(sqle.getErrorCode()==40000) {
+        System.out.println("Database not found, try to create...");
+        conn = DriverManager.getConnection(dbUrl+";create=true");
+      }
+    } 
+  }
+
 
   public void storeAnalysis(int userid, String entity, double salience, double magnitude, double score, LocalDate date, String metadata, String type) throws SQLException {
 
-    String dbUrl = "jdbc:derby:data/nlpdb;create=true";
-    conn = DriverManager.getConnection(dbUrl);
-
     try {
+      Connection conn = connectionToDerby();
+
       Statement stmt = conn.createStatement();
    
       String sql = "insert into entitysentiment (userid, entity, salience, magnitude, score, date, metadata, type) values ("+userid+", '"+entity+"', "+salience+", "+magnitude+", "+score+", '"+date+"', '"+metadata+"', '"+type+"')";
@@ -35,18 +73,18 @@ public class DerbyDB{
 
       stmt.executeUpdate(sql);
 
-    } catch (Exception e) {
+    } catch (SQLException e) {
       e.printStackTrace();
     }
   }
 
   public void storeSentiment(int userid, double magnitude, double score, LocalDate date) throws SQLException {
 
-    String dbUrl = "jdbc:derby:data/nlpdb;create=true";
-    conn = DriverManager.getConnection(dbUrl);
-
     try {
+      Connection conn = connectionToDerby();
+
       Statement stmt = conn.createStatement();
+
    
       String sql = "insert into sentiment (userid, magnitude, score, date) values ("+userid+", "+magnitude+", "+score+", '"+date+"')";
 
@@ -54,7 +92,7 @@ public class DerbyDB{
 
       stmt.executeUpdate(sql);
 
-    } catch (Exception e) {
+    } catch (SQLException e) {
       e.printStackTrace();
     }
   }
@@ -69,12 +107,10 @@ public class DerbyDB{
  */
   public String[] getEntitySentimentData(String sort, int top) throws SQLException {
 
-    String dbUrl = "jdbc:derby:data/nlpdb;create=true";
-    conn = DriverManager.getConnection(dbUrl);
-
     String[] output = new String[top];
 
     try {
+      Connection conn = connectionToDerby();
       Statement stmt = conn.createStatement();
    
       ResultSet rs = stmt.executeQuery("SELECT entity FROM entitysentiment ORDER BY (score*10)*(magnitude*10)*(salience*100) "+sort+" FETCH NEXT "+top+" ROWS ONLY");
@@ -86,7 +122,7 @@ public class DerbyDB{
         output[idx] = rs.getString("entity");
         idx++;
         }     
-    } catch (Exception e) {
+    } catch (SQLException e) {
       e.printStackTrace();
     }
     return output;
@@ -97,10 +133,10 @@ public class DerbyDB{
  * Returns null if there is no entry.
  */
   public String getUsername(int userid) {
-    String dbUrl = "jdbc:derby:data/nlpdb;create=true";
-   
+
     try {
-      conn = DriverManager.getConnection(dbUrl);
+      Connection conn = connectionToDerby();
+
       Statement stmt = conn.createStatement();
 
       ResultSet rs = stmt.executeQuery("SELECT handle FROM telegramuser WHERE userid = "+userid);
@@ -108,29 +144,29 @@ public class DerbyDB{
       if (rs.next()) 
         return rs.getString("handle");
 
-    } catch (Exception e) {
+    } catch (SQLException e) {
       e.printStackTrace();
     }
     return null;
   }
 
 /**
- * Creates a new User
+ * Create a new User
  */
   public void createUser(int userid, String username, String firstname) {
-    String dbUrl = "jdbc:derby:data/nlpdb;create=true";
    
     try {
-      conn = DriverManager.getConnection(dbUrl);
+      Connection conn = connectionToDerby();
       Statement stmt = conn.createStatement();
 
+          
       String sql = "insert into telegramuser (userid, handle, firstname) values ("+userid+", '"+username+"', '"+firstname+"')";
 
       System.out.println(sql);
 
       stmt.executeUpdate(sql);
 
-    } catch (Exception e) {
+    } catch (SQLException e) {
       e.printStackTrace();
     }
   }
@@ -161,10 +197,10 @@ public class DerbyDB{
  * Create a new table, unless it already exists
  */
   public void createTable(String sql) {
-    String dbUrl = "jdbc:derby:data/nlpdb;create=true";
-
+   
     try {
-      conn = DriverManager.getConnection(dbUrl);
+       Connection conn = connectionToDerby();
+     
       Statement stmt = conn.createStatement();
       stmt.executeUpdate(sql);
     } catch (SQLException e) {
