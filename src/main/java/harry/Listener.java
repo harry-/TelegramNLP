@@ -23,30 +23,24 @@ public class Listener {
     LocalDateTime currentTime = LocalDateTime.now();
     LocalDate date = currentTime.toLocalDate();
 
-    try {
-      List<Entity> entities = cloud.getEntSent2(text);
+    List<Entity> entities = cloud.getEntSent2(text);
 
-      for (Entity entity : entities) {
-        String answer = "Entity: " + entity.getName();
-        answer += ", Salience: " + entity.getSalience();
-        answer += ", Score: " + entity.getSentiment().getScore();
-        answer += ", Magnitude: " + entity.getSentiment().getMagnitude();
-        answer += ", Type: " + entity.getType().name();
+    for (Entity entity : entities) {
+      String answer = "Entity: " + entity.getName();
+      answer += ", Salience: " + entity.getSalience();
+      answer += ", Score: " + entity.getSentiment().getScore();
+      answer += ", Magnitude: " + entity.getSentiment().getMagnitude();
+      answer += ", Type: " + entity.getType().name();
 
-        System.out.println(answer);
+      System.out.println(answer);
 
-        db.storeAnalysis(userID,
-          entity.getName(),
-          entity.getSalience(), 
-          entity.getSentiment().getMagnitude(), 
-          entity.getSentiment().getScore(), 
-          date, "",
-          entity.getType().name());
-      }
-    } catch (SQLException sqle) {
-      System.out.println(sqle.toString());
-    }  catch (Exception e) {
-      System.out.println(e.toString());
+      db.storeAnalysis(userID,
+        entity.getName(),
+        entity.getSalience(), 
+        entity.getSentiment().getMagnitude(), 
+        entity.getSentiment().getScore(), 
+        date, "",
+        entity.getType().name());
     }
   }
   public void theCloudListensToSentiments(int userID, String text) {
@@ -57,24 +51,17 @@ public class Listener {
     LocalDateTime currentTime = LocalDateTime.now();
     LocalDate date = currentTime.toLocalDate();
 
-    try {
-      Sentiment sentiment = cloud.getSentimentObject(text);
+    Sentiment sentiment = cloud.getSentimentObject(text);
 
-      String answer = ", Score: " + sentiment.getScore();
-      answer += ", Magnitude: " + sentiment.getMagnitude();
+    String answer = ", Score: " + sentiment.getScore();
+    answer += ", Magnitude: " + sentiment.getMagnitude();
 
-      System.out.println(answer);
+    System.out.println(answer);
 
-      db.storeSentiment(userID,
-        sentiment.getMagnitude(), 
-        sentiment.getScore(), 
-        date);
-      
-    } catch (SQLException sqle) {
-      System.out.println(sqle.toString());
-    }  catch (Exception e) {
-      System.out.println(e.toString());
-    }
+    db.storeSentiment(userID,
+      sentiment.getMagnitude(), 
+      sentiment.getScore(), 
+      date);
   }
 
   public void checkUser(int userid, String username, String firstname) {
