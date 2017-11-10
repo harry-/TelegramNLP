@@ -14,7 +14,7 @@ public class DerbyDB{
   String databaseName="data/nlpdb";
   String dbUrl = "jdbc:derby:"+databaseName;
  
-  public Connection connectionToDerby() {
+  private Connection connectionToDerby() {
     Connection conn = null;
     try {      
       conn = DriverManager.getConnection(dbUrl);       
@@ -24,7 +24,22 @@ public class DerbyDB{
     return conn;
   }
 
-  public void checkDB() throws SQLException {
+  // this is just to catch failure to create the db
+  public void checkDB()
+  {
+     try {
+      initializeDB();
+      } catch (SQLException sqle) {
+      sqle.printStackTrace();
+    }
+  }
+
+  
+/**
+ * Check if the DB is there
+ * If it is not, try to create it.
+ */
+  public void initializeDB() throws SQLException {
     Connection conn = null;
     System.out.println("Check database");
     try {      
@@ -33,6 +48,7 @@ public class DerbyDB{
       if(sqle.getSQLState().equals("XJ004")) {
         System.out.println("Database not found, try to create...");
         createDB();
+        initializeTables();
         System.out.println("Done");
       }
     } 
@@ -195,6 +211,7 @@ public class DerbyDB{
  * Create db structure on first run
  */
   public void initializeTables() {
+    System.out.println("create tables");
     createTable("CREATE TABLE telegramuser (userid int, firstname varchar(40), secondname varchar(40), handle varchar(40), gender varchar(10))");
     createTable("create table sentiment (index INTEGER NOT NULL GENERATED ALWAYS AS IDENTITY (START WITH 1, INCREMENT BY 1), userid int, magnitude double, score double, date date)");
     createTable("create table entitysentiment (index INTEGER NOT NULL GENERATED ALWAYS AS IDENTITY (START WITH 1, INCREMENT BY 1), userid int, entity varchar(100), salience double, magnitude double, score double, date date, metadata varchar(100), type varchar(40))");
