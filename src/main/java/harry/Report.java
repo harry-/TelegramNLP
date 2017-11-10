@@ -1,5 +1,7 @@
 package harry;
 
+import com.j256.ormlite.dao.Dao;
+
 import java.sql.SQLException;
 import harry.DerbyDB;
 
@@ -17,6 +19,13 @@ public class Report {
 		String[] worst  = new String[3];
 		DerbyDB db = new DerbyDB();
 
+		String gender = "";
+		Dao<Telegramuser, String> userdao = OrmLite.getTelegramUserDao();
+		for (Telegramuser tuser : userdao) {
+    	if (tuser.getHandle().equals(user))
+ 				gender = tuser.getGender();
+		}
+
 		try {
 			worst = db.getEntitySentimentData("ASC", 3, user);
 			fav = db.getEntitySentimentData("DESC", 3, user);
@@ -25,7 +34,15 @@ public class Report {
 			return e.getMessage();
 		}
 
-    report = user +" likes "+fav[0]+", "+fav[1]+" and "+fav[2]+". They dislike "+worst[0]+", "+worst[1]+" and "+worst[2]+".";
+		String xdislike = "They dislike";
+		if (gender != null ) {
+			if (gender.equals("male"))
+				xdislike = "He dislikes";
+			else if (gender.equals("female"))
+				xdislike = "She dislikes";
+		}
+
+    report = user +" likes "+fav[0]+", "+fav[1]+" and "+fav[2]+". "+xdislike+" "+worst[0]+", "+worst[1]+" and "+worst[2]+".";
 
 		return report;
 	}
