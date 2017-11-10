@@ -17,13 +17,8 @@ public class NLP {
   public static void main(String... args) {
   
     //Initialize the database
-  	DerbyDB db = new DerbyDB();
-    try {
-      db.checkDB();
-      db.initializeTables();
-    } catch (SQLException sqle) {
-      sqle.printStackTrace();
-    }
+    DerbyDB db = new DerbyDB();
+    db.checkDB();
 
     ApiContextInitializer.init();
 
