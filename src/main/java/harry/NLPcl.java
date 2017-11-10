@@ -19,14 +19,9 @@ public class NLPcl {
         .parse(args);
   
     //Initialize the database
-  	DerbyDB db = new DerbyDB();
-  	try {
-  		db.checkDB();
-  		db.initializeTables();
-  	} catch (SQLException sqle) {
-  		sqle.printStackTrace();
-  	}
-
+    DerbyDB db = new DerbyDB();
+    db.checkDB();
+    
 	nlpcl.report();
   }
 
