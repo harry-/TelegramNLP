@@ -15,6 +15,7 @@ import java.util.concurrent.ConcurrentHashMap;
 import java.util.Map;
 
 import harry.GoogleCloud;
+import harry.DerbyDB;
 
 
 public class NLPBot extends TelegramLongPollingBot {
@@ -31,7 +32,7 @@ public class NLPBot extends TelegramLongPollingBot {
     if (update.hasMessage() && update.getMessage().hasText()) {
 
       Listener listener = new Listener();
-
+      DerbyDB db = new DerbyDB();
 
       // switches
       if (update.getMessage().getText().equals("entity")) 
@@ -62,10 +63,20 @@ public class NLPBot extends TelegramLongPollingBot {
           if (update.getMessage().getText().equals("hello"))
             message.setText("hello " + update.getMessage().getFrom().getUserName());
 
-          else if (update.getMessage().getText().startsWith("entity sentiment report")) {
+          else if (update.getMessage().getText().startsWith("set gender")) {
+            String[] splitted = update.getMessage().getText().split(" ");
+            try {
+              db.setGender(splitted[2], splitted[3]);
+              message.setText("alright then");
+            } catch (IllegalArgumentException e) {
+              message.setText(e.getMessage());
+            }
+          }
+
+          else if (update.getMessage().getText().startsWith("report")) {
             Report report = new Report();
             String[] splitted = update.getMessage().getText().split(" ");
-            message.setText(report.entitySentiment(splitted[3]));
+            message.setText(report.entitySentiment(splitted[1]));
           }
 
           // switch dependent commands that produce a reply (only in private chat)

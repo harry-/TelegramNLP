@@ -4,6 +4,13 @@ import java.sql.SQLException;
 import harry.DerbyDB;
 
 public class Report {
+
+	/**
+	 * Create a report
+	 *
+	 * @param user	userhandle
+	 * @return a verbose report
+	 */
 	public String entitySentiment(String user) {
 		String report = "This will be the report.";
 		String[] fav = new String[3];

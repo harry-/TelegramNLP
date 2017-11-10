@@ -21,3 +21,5 @@ The final report should be something like this: "Harry likes a, b and d. He disl
 Pronouns.
 
 The db check doesnt notice if there is only read access to the db, it seems, i.e. the program crashes while squirrel has an open connection to the db (ERROR XSDB6: Another instance of Derby may have already booted the database).
+
+Similar problem when another instance is using the telegram token.

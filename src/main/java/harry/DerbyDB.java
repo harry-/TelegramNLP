@@ -186,6 +186,30 @@ public class DerbyDB{
   }
 
 /**
+ * Set the gender of a user
+ * 
+ */
+  public void setGender(String userhandle, String gender) {
+
+    try {
+      Connection conn = connectionToDerby();
+
+      Statement stmt = conn.createStatement();
+      String sql = "UPDATE telegramuser SET gender = '"+gender+"' WHERE handle='"+userhandle+"'";
+
+      System.out.println(sql);
+
+      stmt.executeUpdate(sql);
+      stmt.close();
+      conn.close(); 
+
+    } catch (SQLException e) {
+      e.printStackTrace();
+    }
+    throw new IllegalArgumentException( "User "+userhandle+" does not exist in database");
+  }
+
+/**
  * Create a new User
  */
   public void createUser(int userid, String username, String firstname) {
