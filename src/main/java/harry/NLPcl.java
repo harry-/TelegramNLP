@@ -29,5 +29,7 @@ public class NLPcl {
   public void report() {
   	Report report = new Report();
     System.out.println(report.report(user));
+    System.out.println(report.userList());
+    System.out.println(report.allReports());
   }
 }

@@ -63,6 +63,12 @@ public class NLPBot extends TelegramLongPollingBot {
           if (update.getMessage().getText().equals("hello"))
             message.setText("hello " + update.getMessage().getFrom().getUserName());
 
+          else if (update.getMessage().getText().equals("list users"))
+            message.setText(Report.userList());
+
+          else if (update.getMessage().getText().equals("all reports"))
+            message.setText(Report.allReports());
+
           else if (update.getMessage().getText().startsWith("set gender")) {
             String[] splitted = update.getMessage().getText().split(" ");
             try {
@@ -74,9 +80,9 @@ public class NLPBot extends TelegramLongPollingBot {
           }
 
           else if (update.getMessage().getText().startsWith("report")) {
-            Report report = new Report();
+   
             String[] splitted = update.getMessage().getText().split(" ");
-            message.setText(report.report(splitted[1]));
+            message.setText(Report.report(splitted[1]));
           }
 
           // switch dependent commands that produce a reply (only in private chat)

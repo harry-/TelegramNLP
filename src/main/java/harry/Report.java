@@ -13,7 +13,7 @@ public class Report {
 	 * @param		handle	userhandle
 	 * @return 	a verbose report
 	 */
-	public String report(String handle) {
+	public static String report(String handle) {
 		String report = "This will be the report.";
 
 		report = 	capitalize(entitySentiment(handle)) +
@@ -31,7 +31,7 @@ public class Report {
 	 * @param handle	userhandle
 	 * @return a verbose report
 	 */
-	public String entitySentiment(String handle) {
+	public static String entitySentiment(String handle) {
 		String report = "This will be the report.";
 		String[] fav = new String[3];
 		String[] worst  = new String[3];
@@ -66,7 +66,7 @@ public class Report {
 	 * @param handle	userhandle
 	 * @return a verbose report
 	 */
-	public String favWord (String handle) {
+	public static String favWord (String handle) {
 		String report = "This will be the report.";
 		String fav = "";
 
@@ -102,7 +102,7 @@ public class Report {
 	 * @param handle  	user handle
 	 * @return a verbose report
 	 */
-	public String favInCategory (String handle, String category) {
+	public static String favInCategory (String handle, String category) {
 		String report = "This will be the report.";
 		String[] fav = new String[1];
 
@@ -140,7 +140,7 @@ public class Report {
 	 * @param handle  	user handle
 	 * @return a verbose report
 	 */
-	public String mood (String handle) {
+	public static String mood (String handle) {
 		String report = "This will be the report.";
 		Double mood = 0.0;
 
@@ -175,11 +175,31 @@ public class Report {
 		return report;
 	}
 
-	public String capitalize(String input) {
+	public static String userList() {
+		String output = "";
+
+	  Dao<Telegramuser, String> userdao = OrmLite.getTelegramUserDao();
+	  for (Telegramuser user : userdao) {
+      output+=user.getHandle()+", "+user.getFirstname()+" ("+user.getUserid()+")\n";
+    }
+    return output;
+	}
+
+	public static String allReports() {
+		String output = "";
+
+	  Dao<Telegramuser, String> userdao = OrmLite.getTelegramUserDao();
+	  for (Telegramuser user : userdao) {
+	  	output += report(user.getHandle()) +"\n\n";
+    }
+    return output;
+	}
+
+	public static String capitalize(String input) {
 		return input.substring(0, 1).toUpperCase() + input.substring(1);
 	}
 
-	public String uncapitalize(String input) {
+	public static String uncapitalize(String input) {
 		return input.substring(0, 1).toLowerCase() + input.substring(1);
 	}
 }

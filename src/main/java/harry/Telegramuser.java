@@ -54,7 +54,7 @@ public class Telegramuser {
 		public void setFirstname(String firstname) {
 			this.FIRSTNAME = firstname;
 		}
-		public String getFirstname(String firstname) {
+		public String getFirstname() {
 			return FIRSTNAME;
 		}
 }
