@@ -27,25 +27,20 @@ public class Report {
 	/**
 	 * The three most and least favourite things
 	 *
-	 * @param user	userhandle
+	 * @param handle	userhandle
 	 * @return a verbose report
 	 */
-	public String entitySentiment(String user) {
+	public String entitySentiment(String handle) {
 		String report = "This will be the report.";
 		String[] fav = new String[3];
 		String[] worst  = new String[3];
 		DerbyDB db = new DerbyDB();
 
-		String gender = "";
-		Dao<Telegramuser, String> userdao = OrmLite.getTelegramUserDao();
-		for (Telegramuser tuser : userdao) {
-    	if (tuser.getHandle().equals(user))
- 				gender = tuser.getGender();
-		}
+		String gender = OrmLite.getGenderByHandle(handle);	
 
 		try {
-			worst = db.getEntitySentimentData("ASC", 3, user);
-			fav = db.getEntitySentimentData("DESC", 3, user);
+			worst = db.getEntitySentimentData("ASC", 3, handle);
+			fav = db.getEntitySentimentData("DESC", 3, handle);
 		} catch (IllegalArgumentException e)
 		{
 			return e.getMessage();
@@ -59,7 +54,7 @@ public class Report {
 				xdislike = "She dislikes";
 		}
 
-    report = user +" likes "+fav[0]+", "+fav[1]+" and "+fav[2]+". "+xdislike+" "+worst[0]+", "+worst[1]+" and "+worst[2]+". ";
+    report = handle +" likes "+fav[0]+", "+fav[1]+" and "+fav[2]+". "+xdislike+" "+worst[0]+", "+worst[1]+" and "+worst[2]+". ";
 
 		return report;
 	}
@@ -76,13 +71,6 @@ public class Report {
 
 		DerbyDB db = new DerbyDB();
 
-		String gender = "";
-		Dao<Telegramuser, String> userdao = OrmLite.getTelegramUserDao();
-		for (Telegramuser tuser : userdao) {
-    	if (tuser.getHandle().equals(handle))
- 				gender = tuser.getGender();
-		}
-
 		try {
 			fav = db.getFavWord(handle);
 	
@@ -90,6 +78,8 @@ public class Report {
 		{
 			return e.getMessage();
 		}
+
+		String gender = OrmLite.getGenderByHandle(handle);
 
 		String xdislike = "They talk";
 		if (gender != null ) {

@@ -28,5 +28,18 @@ public class OrmLite {
     }
     return telegramuserDao;
   }
+
+  public static String getGenderByHandle(String handle) {
+
+    String gender = "";
+
+    Dao<Telegramuser, String> userdao = getTelegramUserDao();
+    for (Telegramuser tuser : userdao) {
+      if (tuser.getHandle().equals(handle))
+        gender = tuser.getGender();
+    }
+
+    return gender;
+  }
 }
  
