@@ -38,7 +38,6 @@ public class OrmLite {
       if (tuser.getHandle().equals(handle))
         gender = tuser.getGender();
     }
-
     return gender;
   }
 }

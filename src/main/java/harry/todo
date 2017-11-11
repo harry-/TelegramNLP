@@ -24,4 +24,6 @@ The db check doesnt notice if there is only read access to the db, it seems, i.e
 
 Similar problem when another instance is using the telegram token.
 
-set gender reports "user x not found" despite working just fine
+Set gender reports "user x not found" despite working just fine.
+
+A better "three fav things" algorithm.

@@ -114,7 +114,7 @@ public class DerbyDB{
  * @return entity names as an array of strings
  */
 
-  public String[] getEntitySentimentData(String sort, int top, String user) throws IllegalArgumentException {
+  public String[] getEntitySentimentData(String sort, int top, String user, String category) throws IllegalArgumentException {
 
     String[] output = new String[top];
 
@@ -123,11 +123,17 @@ public class DerbyDB{
       Statement stmt = conn.createStatement();
 
       int userid = getUserId(user);
-   
-      ResultSet rs = stmt.executeQuery("SELECT entity FROM entitysentiment WHERE userid = "+userid+" ORDER BY (score*10)*(magnitude*10)*(salience*100) "+sort+" FETCH NEXT "+top+" ROWS ONLY");
-      //SELECT  entity, (score*100)*(magnitude*100), (score*100)*(magnitude*100)*(salience*100) as SxMxS FROM entitysentiment ORDER BY (score*10)*(magnitude*10) ASC FETCH NEXT 3 ROWS ONLY
-     
-   
+
+      String sql = "SELECT entity FROM entitysentiment WHERE userid = "+userid;
+
+      if (!category.equals("ALL"))
+        sql += " AND type = '"+category+"'";
+
+      sql += " ORDER BY (score*10)*(magnitude*10)*(salience*100) "+sort+" FETCH NEXT "+top+" ROWS ONLY";
+      
+      System.out.println(sql);
+      ResultSet rs = stmt.executeQuery(sql);
+  
       int idx = 0;
       while (rs.next()) { 
         output[idx] = rs.getString("entity");

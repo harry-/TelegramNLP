@@ -9,6 +9,14 @@ import harry.DerbyDB;
 
 public class Report {
 
+	public String capitalize(String input) {
+		return input.substring(0, 1).toUpperCase() + input.substring(1);
+	}
+
+	public String uncapitalize(String input) {
+		return input.substring(0, 1).toLowerCase() + input.substring(1);
+	}
+
 	/**
 	 * Create a report
 	 *
@@ -18,8 +26,10 @@ public class Report {
 	public String report(String handle) {
 		String report = "This will be the report.";
 
-		report = 	entitySentiment(handle) +
-							favWord(handle);	
+		report = 	capitalize(entitySentiment(handle)) +
+							favWord(handle) +
+							favInCategory (handle, "LOCATION") +
+							" and "+uncapitalize(favInCategory(handle, "PERSON"))+".";	
 
 		return report;
 	}
@@ -39,8 +49,8 @@ public class Report {
 		String gender = OrmLite.getGenderByHandle(handle);	
 
 		try {
-			worst = db.getEntitySentimentData("ASC", 3, handle);
-			fav = db.getEntitySentimentData("DESC", 3, handle);
+			worst = db.getEntitySentimentData("ASC", 3, handle, "ALL");
+			fav = db.getEntitySentimentData("DESC", 3, handle, "ALL");
 		} catch (IllegalArgumentException e)
 		{
 			return e.getMessage();
@@ -90,6 +100,44 @@ public class Report {
 		}
 
     report = xdislike+" about "+fav+" a lot. ";
+
+		return report;
+	}
+
+	/**
+	 * A given user's favourite thing in a category
+	 *
+	 * @param category	an entity category (e.g. "Work_Of_Art")
+	 * @param handle  	user handle
+	 * @return a verbose report
+	 */
+	public String favInCategory (String handle, String category) {
+		String report = "This will be the report.";
+		String[] fav = new String[1];
+
+		DerbyDB db = new DerbyDB();
+
+		try {
+			fav = db.getEntitySentimentData("DESC", 1, handle, category);
+	
+		} catch (IllegalArgumentException e)
+		{
+			return e.getMessage();
+		}
+
+		String gender = OrmLite.getGenderByHandle(handle);
+
+		String xdislike = "Their";
+		if (gender != null ) {
+			if (gender.equals("male"))
+				xdislike = "His";
+			else if (gender.equals("female"))
+				xdislike = "Her";
+		}
+
+
+
+    report = xdislike+" favourite "+category.toLowerCase()+" is "+fav[0];
 
 		return report;
 	}
