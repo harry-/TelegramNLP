@@ -290,9 +290,9 @@ public class DerbyDB{
     return exists;
   }
 
-/**
- * Create a new table, unless it already exists
- */
+  /**
+   * Create a new table, unless it already exists
+   */
   public void createTable(String sql) {
    
     try {
@@ -312,4 +312,36 @@ public class DerbyDB{
         // the connection should be closed here
     }
   }
+
+  /**
+   * Retrieve average sentiment score
+   *
+   * @param store   either ASC or DESC
+   * @param top     get the first [top] results of the query 
+   * @return entity names as an array of strings
+   */
+  public Double getAverageSentiment(String handle) {
+
+    Double output = 0.0;
+
+    try {
+      Connection conn = connectionToDerby();
+      Statement stmt = conn.createStatement();
+
+      int userid = getUserId(handle);
+
+      String sql = "SELECT AVG(score) as average FROM sentiment WHERE userid = "+userid;
+
+      System.out.println(sql);
+      ResultSet rs = stmt.executeQuery(sql);
+  
+      rs.next();
+      output = rs.getDouble("average");
+   
+    } catch (SQLException e) {
+      e.printStackTrace();
+    }
+    return output;
+  }
+
 }

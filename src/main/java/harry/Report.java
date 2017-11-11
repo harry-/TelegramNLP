@@ -5,17 +5,7 @@ import com.j256.ormlite.dao.Dao;
 import java.sql.SQLException;
 import harry.DerbyDB;
 
-
-
 public class Report {
-
-	public String capitalize(String input) {
-		return input.substring(0, 1).toUpperCase() + input.substring(1);
-	}
-
-	public String uncapitalize(String input) {
-		return input.substring(0, 1).toLowerCase() + input.substring(1);
-	}
 
 	/**
 	 * Create a report
@@ -29,7 +19,8 @@ public class Report {
 		report = 	capitalize(entitySentiment(handle)) +
 							favWord(handle) +
 							favInCategory (handle, "LOCATION") +
-							" and "+uncapitalize(favInCategory(handle, "PERSON"))+".";	
+							" and "+uncapitalize(favInCategory(handle, "PERSON"))+". " +
+							mood(handle);	
 
 		return report;
 	}
@@ -140,6 +131,56 @@ public class Report {
     report = xdislike+" favourite "+category.toLowerCase()+" is "+fav[0];
 
 		return report;
+	}
+
+	/**
+	 * Mood
+	 *
+	 * @param category	an entity category (e.g. "Work_Of_Art")
+	 * @param handle  	user handle
+	 * @return a verbose report
+	 */
+	public String mood (String handle) {
+		String report = "This will be the report.";
+		Double mood = 0.0;
+
+		DerbyDB db = new DerbyDB();
+
+		try {
+		  mood = db.getAverageSentiment(handle);
+		} catch (IllegalArgumentException e)
+		{
+			return e.getMessage();
+		}
+
+		String gender = OrmLite.getGenderByHandle(handle);
+
+		String xdislike = "They seem";
+		if (gender != null ) {
+			if (gender.equals("male"))
+				xdislike = "He seems";
+			else if (gender.equals("female"))
+				xdislike = "She seems";
+		}
+
+		if (mood<0)
+			report="in a bad mood.";
+		else if (mood>0)
+			report="in a good mood.";
+		else
+			return "";
+
+    report = xdislike+" to generally be "+report;
+
+		return report;
+	}
+
+	public String capitalize(String input) {
+		return input.substring(0, 1).toUpperCase() + input.substring(1);
+	}
+
+	public String uncapitalize(String input) {
+		return input.substring(0, 1).toLowerCase() + input.substring(1);
 	}
 }
 
