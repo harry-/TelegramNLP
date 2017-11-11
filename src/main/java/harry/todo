@@ -18,8 +18,10 @@ Dont store direct messages to the bot in the db.
 
 The final report should be something like this: "Harry likes a, b and d. He dislikes e, f and g". He talks a lot about h. His favourite artist is i and his favourite work of art is j. He seems to generally be in a better mood than last week."
 
-Pronouns.
+[done]Pronouns.
 
 The db check doesnt notice if there is only read access to the db, it seems, i.e. the program crashes while squirrel has an open connection to the db (ERROR XSDB6: Another instance of Derby may have already booted the database).
 
 Similar problem when another instance is using the telegram token.
+
+set gender reports "user x not found" despite working just fine

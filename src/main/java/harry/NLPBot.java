@@ -76,7 +76,7 @@ public class NLPBot extends TelegramLongPollingBot {
           else if (update.getMessage().getText().startsWith("report")) {
             Report report = new Report();
             String[] splitted = update.getMessage().getText().split(" ");
-            message.setText(report.entitySentiment(splitted[1]));
+            message.setText(report.report(splitted[1]));
           }
 
           // switch dependent commands that produce a reply (only in private chat)

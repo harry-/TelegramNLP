@@ -140,6 +140,36 @@ public class DerbyDB{
   }
 
 /**
+ * Retrieve the entity most often mentioned by a given user
+ * Returns null if there is no entry.
+ *
+ * @param handle   user handle
+ * @return entity name as a string
+ */
+
+  public String getFavWord(String handle) throws IllegalArgumentException {
+
+    String output = null;
+
+    try {
+      Connection conn = connectionToDerby();
+      Statement stmt = conn.createStatement();
+
+      int userid = getUserId(handle);
+
+      String sql = "SELECT entity, COUNT(*) AS num FROM entitysentiment WHERE userid = "+userid+" GROUP BY entity ORDER BY NUM DESC FETCH FIRST ROW ONLY";
+   
+      ResultSet rs = stmt.executeQuery(sql);
+      if(rs.next());
+        output = rs.getString("entity");
+
+    } catch (SQLException e) {
+      e.printStackTrace();
+    }
+    return output;
+  }
+
+/**
  * Retrieve the username corresponding to a given userid.
  * Returns null if there is no entry.
  */

@@ -26,7 +26,6 @@ public class OrmLite {
     {
       System.err.println(e.getMessage());
     }
-
     return telegramuserDao;
   }
 }
