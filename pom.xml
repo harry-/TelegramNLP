@@ -44,6 +44,21 @@
               <finalName>NLPcl</finalName>
             </configuration>  
           </execution>
+          <execution>
+            <id>build-third</id>
+            <phase>package</phase>
+            <goals>
+               <goal>shade</goal>
+            </goals>   
+            <configuration>
+              <transformers>
+                <transformer implementation="org.apache.maven.plugins.shade.resource.ManifestResourceTransformer">                        
+                  <mainClass>harry.NLPTwitter</mainClass>
+                </transformer>
+              </transformers>
+              <finalName>twitter</finalName>
+            </configuration>  
+          </execution>
         </executions>
       </plugin>
     </plugins>
@@ -86,6 +101,12 @@
         <artifactId>ormlite-jdbc</artifactId>
         <version>5.0</version>
     </dependency>
+
+    <dependency>
+         <groupId>org.twitter4j</groupId>
+         <artifactId>twitter4j-core</artifactId>
+         <version>[4.0,)</version>
+     </dependency>
 
   </dependencies>
   

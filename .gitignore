@@ -6,3 +6,5 @@ stuff/
 derby.log
 *.log
 prod
+twitter4j.properties
+out.txt
