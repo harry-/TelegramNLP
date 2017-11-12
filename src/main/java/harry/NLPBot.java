@@ -85,7 +85,7 @@ public class NLPBot extends TelegramLongPollingBot {
           else if (update.getMessage().getText().startsWith("report")) {
    
             String[] splitted = update.getMessage().getText().split(" ");
-            message.setText(Report.report(splitted[1]));
+              message.setText(Report.report(splitted[1]));
           }
 
           // switch dependent commands that produce a reply (only in private chat)
@@ -121,7 +121,7 @@ public class NLPBot extends TelegramLongPollingBot {
     helpMessage += "\nlist users\nDisplays all users that are available in the database.\n";
     helpMessage += "\nreport <user>\nDisplay an nlp report on a specific user.\n";
     helpMessage += "\nall reports\nDisplay all available user reports\n";
-    helpMessage += "\n\nIn addition you can also use the bot as a basic interface to some functions of the goole nlp api. By default the bot will provide the sentiment analysis result for messages you send to it. Use the following commands to switch to a different mode:\n";
+    helpMessage += "\n\nIn addition you can also use the bot as a basic interface to some functions of the Google Language API. By default the bot will provide the sentiment analysis result for messages you send to it. Use the following commands to switch to a different mode:\n";
     helpMessage += "\nentity sentiment\nUse this command to switch to entity sentiment analysis mode. The bot will display the results of the google entity sentiment analysis in reply to your text messages from now on.\n";
     helpMessage += "\nentity\nSwitch to entity analysis mode. The bot will display the results of the google entity analysis.\n";
     helpMessage += "\nsentiment\nSwitch back to sentiment analysis (the default mode)\n";
