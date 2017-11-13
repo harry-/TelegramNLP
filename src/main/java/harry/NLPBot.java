@@ -15,6 +15,7 @@ import java.util.concurrent.ConcurrentHashMap;
 import java.util.Map;
 
 import harry.GoogleCloud;
+import harry.DerbyDB;
 
 
 public class NLPBot extends TelegramLongPollingBot {
@@ -32,6 +33,7 @@ public class NLPBot extends TelegramLongPollingBot {
 
       Listener listener = new Listener();
 
+      DerbyDB db = new DerbyDB();
 
       // switches
       if (update.getMessage().getText().equals("entity")) 
@@ -40,7 +42,7 @@ public class NLPBot extends TelegramLongPollingBot {
       else if (update.getMessage().getText().equals("sentiment")) 
         mode="sentiment";
 
-      else if (update.getMessage().getText().equals("entities-sentiment")) 
+      else if (update.getMessage().getText().equals("entity sentiment")) 
         mode="entities-sentiment";
       
       // commands that produce a reply
@@ -62,10 +64,29 @@ public class NLPBot extends TelegramLongPollingBot {
           if (update.getMessage().getText().equals("hello"))
             message.setText("hello " + update.getMessage().getFrom().getUserName());
 
-          else if (update.getMessage().getText().startsWith("entity sentiment report")) {
-            Report report = new Report();
+          else if (update.getMessage().getText().equals("list users"))
+            message.setText(Report.userList());
+
+          else if (update.getMessage().getText().equals("all reports"))
+            message.setText(Report.allReports());
+
+          else if (update.getMessage().getText().equals("help"))
+            message.setText(displayHelp());
+
+          else if (update.getMessage().getText().startsWith("set gender")) {
             String[] splitted = update.getMessage().getText().split(" ");
-            message.setText(report.entitySentiment(splitted[3]));
+            try {
+              db.setGender(splitted[2], splitted[3]);
+              message.setText("alright then");
+            } catch (IllegalArgumentException e) {
+              message.setText(e.getMessage());
+            }
+          }
+
+          else if (update.getMessage().getText().startsWith("report")) {
+   
+            String[] splitted = update.getMessage().getText().split(" ");
+              message.setText(Report.report(splitted[1]));
           }
 
           // switch dependent commands that produce a reply (only in private chat)
@@ -91,6 +112,22 @@ public class NLPBot extends TelegramLongPollingBot {
         }
       }
     }
+  }
+
+  public String displayHelp()
+  {
+    String helpMessage = "";
+
+    helpMessage += "This bot listens to all messages in channels that it has been added to, analyzes them using the Google Natural Language API (https://cloud.google.com/natural-language/) and stores the result in a database. You can use the following commands to interact with it:\n";
+    helpMessage += "\nlist users\nDisplays all users that are available in the database.\n";
+    helpMessage += "\nreport <user>\nDisplay an nlp report on a specific user.\n";
+    helpMessage += "\nall reports\nDisplay all available user reports\n";
+    helpMessage += "\n\nIn addition you can also use the bot as a basic interface to some functions of the Google Language API. By default the bot will provide the sentiment analysis result for messages you send to it. Use the following commands to switch to a different mode:\n";
+    helpMessage += "\nentity sentiment\nUse this command to switch to entity sentiment analysis mode. The bot will display the results of the google entity sentiment analysis in reply to your text messages from now on.\n";
+    helpMessage += "\nentity\nSwitch to entity analysis mode. The bot will display the results of the google entity analysis.\n";
+    helpMessage += "\nsentiment\nSwitch back to sentiment analysis (the default mode)\n";
+
+    return helpMessage;
   }
 
   //import bot credentials from environment variables
