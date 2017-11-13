@@ -62,6 +62,7 @@ public class DerbyDB{
 
   public void storeAnalysis(int userid, String entity, double salience, double magnitude, double score, LocalDate date, String metadata, String type) {
 
+
     try {
       Connection conn = connectionToDerby();
 
@@ -81,6 +82,7 @@ public class DerbyDB{
     }
   }
 
+
   public void storeSentiment(int userid, double magnitude, double score, LocalDate date) {
 
     try {
@@ -88,7 +90,6 @@ public class DerbyDB{
 
       Statement stmt = conn.createStatement();
 
-   
       String sql = "insert into sentiment (userid, magnitude, score, date) values ("+userid+", "+magnitude+", "+score+", '"+date+"')";
 
       System.out.println(sql);
@@ -111,7 +112,7 @@ public class DerbyDB{
  * @return entity names as an array of strings
  */
 
-  public String[] getEntitySentimentData(String sort, int top, String user) throws IllegalArgumentException {
+  public String[] getEntitySentimentData(String sort, int top, String user, String category) throws IllegalArgumentException {
 
     String[] output = new String[top];
 
@@ -120,16 +121,52 @@ public class DerbyDB{
       Statement stmt = conn.createStatement();
 
       int userid = getUserId(user);
-   
-      ResultSet rs = stmt.executeQuery("SELECT entity FROM entitysentiment WHERE userid = "+userid+" ORDER BY (score*10)*(magnitude*10)*(salience*100) "+sort+" FETCH NEXT "+top+" ROWS ONLY");
-      //SELECT  entity, (score*100)*(magnitude*100), (score*100)*(magnitude*100)*(salience*100) as SxMxS FROM entitysentiment ORDER BY (score*10)*(magnitude*10) ASC FETCH NEXT 3 ROWS ONLY
-     
-   
+
+      String sql = "SELECT entity FROM entitysentiment WHERE userid = "+userid;
+
+      if (!category.equals("ALL"))
+        sql += " AND type = '"+category+"'";
+
+      sql += " ORDER BY (score*10)*(magnitude*10)*(salience*100) "+sort+" FETCH NEXT "+top+" ROWS ONLY";
+      
+      System.out.println(sql);
+      ResultSet rs = stmt.executeQuery(sql);
+  
       int idx = 0;
       while (rs.next()) { 
         output[idx] = rs.getString("entity");
         idx++;
         }     
+    } catch (SQLException e) {
+      e.printStackTrace();
+    }
+    return output;
+  }
+
+/**
+ * Retrieve the entity most often mentioned by a given user
+ * Returns null if there is no entry.
+ *
+ * @param handle   user handle
+ * @return entity name as a string
+ */
+
+  public String getFavWord(String handle) throws IllegalArgumentException {
+
+    String output = null;
+
+    try {
+      Connection conn = connectionToDerby();
+      Statement stmt = conn.createStatement();
+
+      int userid = getUserId(handle);
+
+      String sql = "SELECT entity, COUNT(*) AS num FROM entitysentiment WHERE userid = "+userid+" GROUP BY entity ORDER BY NUM DESC FETCH FIRST ROW ONLY";
+   
+      ResultSet rs = stmt.executeQuery(sql);
+      if(rs.next());
+        output = rs.getString("entity");
+
     } catch (SQLException e) {
       e.printStackTrace();
     }
@@ -183,6 +220,30 @@ public class DerbyDB{
   }
 
 /**
+ * Set the gender of a user
+ * 
+ */
+  public void setGender(String userhandle, String gender) {
+
+    try {
+      Connection conn = connectionToDerby();
+
+      Statement stmt = conn.createStatement();
+      String sql = "UPDATE telegramuser SET gender = '"+gender+"' WHERE handle='"+userhandle+"'";
+
+      System.out.println(sql);
+
+      stmt.executeUpdate(sql);
+      stmt.close();
+      conn.close(); 
+
+    } catch (SQLException e) {
+      e.printStackTrace();
+    }
+    throw new IllegalArgumentException( "User "+userhandle+" does not exist in database");
+  }
+
+/**
  * Create a new User
  */
   public void createUser(int userid, String username, String firstname) {
@@ -209,7 +270,7 @@ public class DerbyDB{
  */
   public void initializeTables() {
     System.out.println("create tables");
-    createTable("CREATE TABLE telegramuser (userid int, firstname varchar(40), secondname varchar(40), handle varchar(40), gender varchar(10))");
+    createTable("CREATE TABLE Telegramuser (Userid int, Firstname varchar(40), Secondname varchar(40), Handle varchar(40), Gender varchar(10))");
     createTable("create table sentiment (index INTEGER NOT NULL GENERATED ALWAYS AS IDENTITY (START WITH 1, INCREMENT BY 1), userid int, magnitude double, score double, date date)");
     createTable("create table entitysentiment (index INTEGER NOT NULL GENERATED ALWAYS AS IDENTITY (START WITH 1, INCREMENT BY 1), userid int, entity varchar(100), salience double, magnitude double, score double, date date, metadata varchar(100), type varchar(40))");
   }
@@ -227,9 +288,9 @@ public class DerbyDB{
     return exists;
   }
 
-/**
- * Create a new table, unless it already exists
- */
+  /**
+   * Create a new table, unless it already exists
+   */
   public void createTable(String sql) {
    
     try {
@@ -249,4 +310,37 @@ public class DerbyDB{
         // the connection should be closed here
     }
   }
+
+  /**
+   * Retrieve average sentiment score
+   *
+   * @param store   either ASC or DESC
+   * @param top     get the first [top] results of the query 
+   * @return entity names as an array of strings
+   */
+  public Double getAverageSentiment(String handle) {
+
+    Double output = 0.0;
+
+    try {
+      Connection conn = connectionToDerby();
+      Statement stmt = conn.createStatement();
+
+      int userid = getUserId(handle);
+
+      String sql = "SELECT AVG(score) as average FROM sentiment WHERE userid = "+userid;
+
+      System.out.println(sql);
+      ResultSet rs = stmt.executeQuery(sql);
+  
+      rs.next();
+      output = rs.getDouble("average");
+   
+    } catch (SQLException e) {
+      e.printStackTrace();
+    }
+    return output;
+
+  }
+
 }

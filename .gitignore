@@ -6,3 +6,8 @@ stuff/
 derby.log
 *.log
 prod
+<<<<<<< HEAD
+=======
+twitter4j.properties
+out.txt
+>>>>>>> 2ae7c19a0da44760b57423109385398d0f434f18
