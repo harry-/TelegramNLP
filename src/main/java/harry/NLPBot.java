@@ -31,8 +31,6 @@ public class NLPBot extends TelegramLongPollingBot {
     // We check if the update has a message and the message has text
     if (update.hasMessage() && update.getMessage().hasText()) {
 
-      Listener listener = new Listener();
-
       DerbyDB db = new DerbyDB();
 
       // switches
@@ -49,11 +47,11 @@ public class NLPBot extends TelegramLongPollingBot {
       else {
         try {
 
-          listener.theCloudListens(update.getMessage().getFrom().getId(), 
+          Listener.theCloudListens(update.getMessage().getFrom().getId(), 
             update.getMessage().getText());
-          listener.theCloudListensToSentiments(update.getMessage().getFrom().getId(), 
+          Listener.theCloudListensToSentiments(update.getMessage().getFrom().getId(), 
             update.getMessage().getText());
-          listener.checkUser(update.getMessage().getFrom().getId(), 
+          Listener.checkUser(update.getMessage().getFrom().getId(), 
             update.getMessage().getFrom().getUserName(), 
             update.getMessage().getFrom().getFirstName());
 
