@@ -41,6 +41,7 @@ public class Report {
 
 		String gender = OrmLite.getGenderByHandle(handle);	
 
+
 		try {
 			worst = db.getEntitySentimentData("ASC", 3, handle, "ALL");
 			fav = db.getEntitySentimentData("DESC", 3, handle, "ALL");
@@ -58,6 +59,41 @@ public class Report {
 		}
 
     report = handle +" likes "+fav[0]+", "+fav[1]+" and "+fav[2]+". "+xdislike+" "+worst[0]+", "+worst[1]+" and "+worst[2]+". ";
+
+		return report;
+	}
+
+ /**
+	* A given user's favourite thing in a category
+	*
+	* @param	category	an entity category (e.g. "Work_Of_Art")
+	* @param 	handle  	user handle
+	* @return 					a verbose report
+	*/
+	public static String favInCategory (String handle, String category) {
+		String report = "This will be the report.";
+		String[] fav = new String[1];
+
+		DerbyDB db = new DerbyDB();
+
+		try {
+			fav = db.getEntitySentimentData("DESC", 1, handle, category);
+		} catch (IllegalArgumentException e)
+		{
+			return e.getMessage();
+		}
+
+		String gender = OrmLite.getGenderByHandle(handle);
+
+		String xdislike = "Their";
+		if (gender != null ) {
+			if (gender.equals("male"))
+				xdislike = "His";
+			else if (gender.equals("female"))
+				xdislike = "Her";
+		}
+
+    report = xdislike+" favourite "+category.toLowerCase()+" is "+fav[0];
 
 		return report;
 	}
@@ -98,47 +134,8 @@ public class Report {
 	}
 
  /**
-	* A given user's favourite thing in a category
-	*
-	* @param	category	an entity category (e.g. "Work_Of_Art")
-	* @param 	handle  	user handle
-	* @return 					a verbose report
-	*/
-	public static String favInCategory (String handle, String category) {
-		String report = "This will be the report.";
-		String[] fav = new String[1];
-
-		DerbyDB db = new DerbyDB();
-
-		try {
-			fav = db.getEntitySentimentData("DESC", 1, handle, category);
-	
-		} catch (IllegalArgumentException e)
-		{
-			return e.getMessage();
-		}
-
-		String gender = OrmLite.getGenderByHandle(handle);
-
-		String xdislike = "Their";
-		if (gender != null ) {
-			if (gender.equals("male"))
-				xdislike = "His";
-			else if (gender.equals("female"))
-				xdislike = "Her";
-		}
-
-
-
-    report = xdislike+" favourite "+category.toLowerCase()+" is "+fav[0];
-
-		return report;
-	}
-
- /**
 	* Mood
 	*
-	* @param	category 	an entity category (e.g. "Work_Of_Art")
 	* @param 	handle  	user handle
 	* @return 					a verbose report
 	*/
@@ -150,7 +147,6 @@ public class Report {
 
 		try {
 		  mood = db.getAverageSentiment(handle);
-
 		} catch (IllegalArgumentException e)
 		{
 			return e.getMessage();
@@ -230,4 +226,3 @@ public class Report {
 	}
 }
 
->>>>>>> 2ae7c19a0da44760b57423109385398d0f434f18

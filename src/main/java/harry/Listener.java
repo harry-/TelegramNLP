@@ -15,7 +15,7 @@ import java.util.List;
 
 public class Listener {
 
-  public void theCloudListens(int userID, String text) {
+  public static void theCloudListens(int userID, String text) {
 
     GoogleCloud cloud = new GoogleCloud();
     DerbyDB db = new DerbyDB();
@@ -43,7 +43,7 @@ public class Listener {
         entity.getType().name());
     }
   }
-  public void theCloudListensToSentiments(int userID, String text) {
+  public static void theCloudListensToSentiments(int userID, String text) {
 
     GoogleCloud cloud = new GoogleCloud();
     DerbyDB db = new DerbyDB();
@@ -64,7 +64,7 @@ public class Listener {
       date);
   }
 
-  public void checkUser(int userid, String username, String firstname) {
+  public static void checkUser(int userid, String username, String firstname) {
     DerbyDB db = new DerbyDB();
     if (db.getUsername(userid) == null)
       db.createUser(userid, username, firstname);
