@@ -8,6 +8,7 @@ import com.beust.jcommander.Parameter;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
+
 public class NLPcl {
 
   Logger logger = LogManager.getLogger();
@@ -15,7 +16,7 @@ public class NLPcl {
   @Parameter(names = "-user", description = "telegram @ handle (without the @)")
   private String user;
   @Parameter(names = "-command", description = "same as the botcommands maybe at some point")
-  private String command;
+  private String command = "none";
 
   public static void main(String... args) throws Exception {
 

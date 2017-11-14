@@ -9,3 +9,4 @@ prod
 *.properties
 out.txt
 
+command.sh
