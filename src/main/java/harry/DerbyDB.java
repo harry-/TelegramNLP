@@ -66,16 +66,13 @@ public class DerbyDB{
 
 
   public void storeAnalysis(int userid, String entity, double salience, double magnitude, double score, LocalDate date, String metadata, String type) {
-
-
     try {
       Connection conn = connectionToDerby();
 
       Statement stmt = conn.createStatement();
    
       String sql = "insert into entitysentiment (userid, entity, salience, magnitude, score, date, metadata, type) values ("+userid+", '"+entity+"', "+salience+", "+magnitude+", "+score+", '"+date+"', '"+metadata+"', '"+type+"')";
-
-      System.out.println(sql);
+      logger.debug(sql);
 
       stmt.executeUpdate(sql);
 
@@ -89,20 +86,17 @@ public class DerbyDB{
 
 
   public void storeSentiment(int userid, double magnitude, double score, LocalDate date) {
-
     try {
       Connection conn = connectionToDerby();
-
       Statement stmt = conn.createStatement();
 
       String sql = "insert into sentiment (userid, magnitude, score, date) values ("+userid+", "+magnitude+", "+score+", '"+date+"')";
 
-      System.out.println(sql);
+      logger.debug(sql);
 
       stmt.executeUpdate(sql);
       stmt.close();
       conn.close(); 
-
     } catch (SQLException e) {
       e.printStackTrace();
     }
@@ -248,6 +242,7 @@ public class DerbyDB{
       stmt.executeUpdate(sql);
       stmt.close();
       conn.close(); 
+      return;
 
     } catch (SQLException e) {
       e.printStackTrace();

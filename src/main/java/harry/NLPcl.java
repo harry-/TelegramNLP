@@ -3,6 +3,7 @@ package harry;
 import harry.DerbyDB;
 import harry.NLPBot;
 import java.sql.SQLException;
+import java.io.IOException;
 import com.beust.jcommander.JCommander;
 import com.beust.jcommander.Parameter;
 import org.apache.logging.log4j.LogManager;
@@ -19,7 +20,6 @@ public class NLPcl {
   private String command = "none";
 
   public static void main(String... args) throws Exception {
-
 
   	NLPcl nlpcl = new NLPcl();
     JCommander.newBuilder()
@@ -42,7 +42,6 @@ public class NLPcl {
     System.out.println(report.report(user));
     System.out.println(report.userList());
     System.out.println(report.allReports());
-
   }
 
   public void commands() {
@@ -58,30 +57,31 @@ public class NLPcl {
         break;
       case  "help":
         System.out.println(NLPBot.displayHelp());
-
     }
-
+    if (command.startsWith("set gender")) {
+      String[] splitted = command.split(" ");
+      try {
+        DerbyDB db = new DerbyDB();
+        db.setGender(splitted[2], splitted[3]);
+        System.out.println("alright then");
+      } catch (IllegalArgumentException e) {
+        logger.error(e.getMessage());
+      }
+    }
+    else if (command.startsWith("report")) {
+      String[] splitted = command.split(" ");
+      System.out.println(Report.report(splitted[1]));
+    }
+    else if (command.startsWith("add twitter user")) {
+      String[] splitted = command.split(" ");
+      System.out.println(TwitterNLP.addTweetsToDB(splitted[3]));
+    }
+    System.out.println();
+    try {
+      System.in.read();
+    } catch (IOException e) {
+      System.err.println(e.getMessage());
+      System.err.println(e.getStackTrace());
+    }
   }  
 }
-/*
-          if (update.getMessage().getText().equals("hello"))
-            message.setText("hello " + update.getMessage().getFrom().getUserName());
-
-          else if (update.getMessage().getText().equals("list users"))
-            message.setText(Report.userList());
-
-          else if (update.getMessage().getText().equals("all reports"))
-            message.setText(Report.allReports());
-
-          else if (update.getMessage().getText().equals("help"))
-            message.setText(displayHelp());
-
-          else if (update.getMessage().getText().startsWith("set gender")) {
-            String[] splitted = update.getMessage().getText().split(" ");
-            try {
-              db.setGender(splitted[2], splitted[3]);
-              message.setText("alright then");
-            } catch (IllegalArgumentException e) {
-              message.setText(e.getMessage());
-            }
-            */
