@@ -250,9 +250,9 @@ public class DerbyDB{
     throw new IllegalArgumentException( "User "+userhandle+" does not exist in database");
   }
 
-/**
- * Create a new User
- */
+ /**
+  * Create a new User
+  */
   public void createUser(int userid, String username, String firstname) {
    
     try {
@@ -260,8 +260,7 @@ public class DerbyDB{
       Statement stmt = conn.createStatement();
 
       String sql = "insert into telegramuser (userid, handle, firstname) values ("+userid+", '"+username+"', '"+firstname+"')";
-
-      System.out.println(sql);
+      logger.debug(sql);
 
       stmt.executeUpdate(sql);
       stmt.close();

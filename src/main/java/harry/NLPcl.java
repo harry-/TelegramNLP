@@ -80,8 +80,8 @@ public class NLPcl {
     try {
       System.in.read();
     } catch (IOException e) {
-      System.err.println(e.getMessage());
-      System.err.println(e.getStackTrace());
+      logger.error(e.getMessage());
+      logger.error(e.getStackTrace());
     }
   }  
 }

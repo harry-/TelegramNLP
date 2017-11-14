@@ -16,12 +16,17 @@ import com.google.cloud.language.v1.LanguageServiceClient;
 import com.google.cloud.language.v1.Sentiment;
 import com.google.cloud.language.v1.Token;
 
+import org.apache.logging.log4j.Logger;
+import org.apache.logging.log4j.LogManager;
+
 import java.util.Map;
 import java.util.List;
 import java.util.ArrayList;
 import java.io.*;
 
 public class GoogleCloud {
+
+  private static Logger logger = LogManager.getLogger();
 
   public String getSent(String text) throws Exception {
     try (LanguageServiceClient language = LanguageServiceClient.create()) {
@@ -45,12 +50,14 @@ public class GoogleCloud {
 
       // Detect the sentiment of the text
       sentiment = language.analyzeSentiment(doc).getDocumentSentiment();
-    } catch (Exception e)
-    {
-      System.err.println("Really no idea, why the Google API throws a generic Exception here\n Error message: "+e.toString());
+    } catch (com.google.api.gax.rpc.InvalidArgumentException e) {
+      logger.error(e.getMessage());
+      logger.debug(e.getStackTrace());
+    } catch (Exception e) {
+      logger.error("Really no idea, why the Google API throws a generic Exception here\n Error message: "+e.toString());
+      logger.debug(e.getStackTrace());    
     }
     return(sentiment);
-    
   }
 
   public String getEnt(String text) throws Exception {
