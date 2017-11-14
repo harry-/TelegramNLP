@@ -5,10 +5,14 @@ import java.sql.DriverManager;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
+import org.apache.logging.log4j.Logger;
+import org.apache.logging.log4j.LogManager;
 
 import java.time.LocalDate;
 
 public class DerbyDB{
+
+  private static Logger logger = LogManager.getLogger(); 
 
   String databaseName="data/nlpdb";
   String dbUrl = "jdbc:derby:"+databaseName;
@@ -26,11 +30,12 @@ public class DerbyDB{
   // this is just to catch failure to create the db
   public void checkDB()
   {
-     try {
+    try {
       initializeDB();
-      } catch (SQLException sqle) {
+    } catch (SQLException sqle) {
       sqle.printStackTrace();
     }
+
   }
 
   
@@ -40,15 +45,15 @@ public class DerbyDB{
  */
   public void initializeDB() throws SQLException {
     Connection conn = null;
-    System.out.println("Check database");
     try {      
-      conn = DriverManager.getConnection(dbUrl);       
+      conn = DriverManager.getConnection(dbUrl); 
+      logger.info("Database found");      
     } catch (SQLException sqle) {
       if(sqle.getSQLState().equals("XJ004")) {
-        System.out.println("Database not found, try to create...");
+        logger.info("Database not found, trying to create...");
         createDB();
         initializeTables();
-        System.out.println("Done");
+        logger.info("Done");
       }
     } 
   }
@@ -129,7 +134,7 @@ public class DerbyDB{
 
       sql += " ORDER BY (score*10)*(magnitude*10)*(salience*100) "+sort+" FETCH NEXT "+top+" ROWS ONLY";
       
-      System.out.println(sql);
+      logger.debug(sql);
       ResultSet rs = stmt.executeQuery(sql);
   
       int idx = 0;
@@ -206,7 +211,7 @@ public class DerbyDB{
 
       Statement stmt = conn.createStatement();
       String sql = "SELECT userid FROM telegramuser WHERE handle = '"+userhandle+"'";
-      System.out.println(sql);
+      logger.debug(sql);
 
       ResultSet rs = stmt.executeQuery(sql);
 
@@ -216,7 +221,14 @@ public class DerbyDB{
     } catch (SQLException e) {
       e.printStackTrace();
     }
-    throw new IllegalArgumentException( "User "+userhandle+" does not exist in database");
+
+    if (userhandle == null) {
+      logger.error("No userhandle provided");
+      throw new IllegalArgumentException( "No userhandle provided.");
+    }
+
+    logger.error("User "+userhandle+" does not exist in database.");
+    throw new IllegalArgumentException( "User "+userhandle+" does not exist in database.");
   }
 
 /**
@@ -231,7 +243,7 @@ public class DerbyDB{
       Statement stmt = conn.createStatement();
       String sql = "UPDATE telegramuser SET gender = '"+gender+"' WHERE handle='"+userhandle+"'";
 
-      System.out.println(sql);
+      logger.debug(sql);
 
       stmt.executeUpdate(sql);
       stmt.close();
@@ -269,10 +281,10 @@ public class DerbyDB{
  * Create db structure on first run
  */
   public void initializeTables() {
-    System.out.println("create tables");
     createTable("CREATE TABLE Telegramuser (Userid int, Firstname varchar(40), Secondname varchar(40), Handle varchar(40), Gender varchar(10))");
     createTable("create table sentiment (index INTEGER NOT NULL GENERATED ALWAYS AS IDENTITY (START WITH 1, INCREMENT BY 1), userid int, magnitude double, score double, date date)");
     createTable("create table entitysentiment (index INTEGER NOT NULL GENERATED ALWAYS AS IDENTITY (START WITH 1, INCREMENT BY 1), userid int, entity varchar(100), salience double, magnitude double, score double, date date, metadata varchar(100), type varchar(40))");
+    logger.info("Tables created");
   }
 
 /**
@@ -329,8 +341,8 @@ public class DerbyDB{
       int userid = getUserId(handle);
 
       String sql = "SELECT AVG(score) as average FROM sentiment WHERE userid = "+userid;
+      logger.debug(sql);
 
-      System.out.println(sql);
       ResultSet rs = stmt.executeQuery(sql);
   
       rs.next();

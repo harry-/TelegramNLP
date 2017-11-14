@@ -2,10 +2,15 @@ package harry;
 
 import com.j256.ormlite.dao.Dao;
 
+import org.apache.logging.log4j.Logger;
+import org.apache.logging.log4j.LogManager;
+
 import java.sql.SQLException;
 import harry.DerbyDB;
 
 public class Report {
+	
+	private static Logger logger = LogManager.getLogger(); 
 
  /**
 	* Create a nice report

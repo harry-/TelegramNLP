@@ -119,7 +119,7 @@ public class NLPBot extends TelegramLongPollingBot {
     }
   }
 
-  public String displayHelp()
+  public static String displayHelp()
   {
     String helpMessage = "";
 
