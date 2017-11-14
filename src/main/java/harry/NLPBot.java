@@ -87,6 +87,13 @@ public class NLPBot extends TelegramLongPollingBot {
               message.setText(Report.report(splitted[1]));
           }
 
+          else if (update.getMessage().getText().startsWith("add twitter user")) {
+   
+            String[] splitted = update.getMessage().getText().split(" ");
+              message.setText(TwitterNLP.addTweetsToDB(splitted[3]));
+          }
+
+
           // switch dependent commands that produce a reply (only in private chat)
           else if (update.getMessage().getChat().isUserChat()){ 
             GoogleCloud cloud = new GoogleCloud();

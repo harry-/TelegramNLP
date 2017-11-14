@@ -64,9 +64,12 @@ public class Listener {
       date);
   }
 
-  public static void checkUser(int userid, String username, String firstname) {
+  public static String checkUser(int userid, String username, String firstname) {
     DerbyDB db = new DerbyDB();
-    if (db.getUsername(userid) == null)
+    if (db.getUsername(userid) == null) {
       db.createUser(userid, username, firstname);
+      return "created";
+    }
+    return "exists";
   }
 }
