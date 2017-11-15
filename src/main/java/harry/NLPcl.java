@@ -45,20 +45,16 @@ public class NLPcl {
   }
 
   public void commands() {
-    switch (command) {
-      case "hello":
-        System.out.println("hello");
-        break;
-      case "list users":
-        System.out.println(Report.userList());
-        break;
-      case  "all reports":
-        System.out.println(Report.allReports());
-        break;
-      case  "help":
-        System.out.println(NLPBot.displayHelp());
-    }
-    if (command.startsWith("set gender")) {
+    System.out.println();
+    if (command.equals("hello")) 
+      System.out.println("hello");
+    else if (command.equals("list users")) 
+      System.out.println(Report.userList());
+    else if (command.equals("all reports")) 
+      System.out.println(Report.allReports());
+    else if (command.equals("help")) 
+      System.out.println(NLPBot.displayHelp());
+    else if (command.startsWith("set gender")) {
       String[] splitted = command.split(" ");
       try {
         DerbyDB db = new DerbyDB();
@@ -75,7 +71,8 @@ public class NLPcl {
     else if (command.startsWith("add twitter user")) {
       String[] splitted = command.split(" ");
       System.out.println(TwitterNLP.addTweetsToDB(splitted[3]));
-    }
+    } else
+      System.out.println("No command found. Try 'help'.");
     System.out.println();
     try {
       System.in.read();

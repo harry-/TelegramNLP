@@ -25,6 +25,7 @@
               <transformers>
                 <transformer implementation="org.apache.maven.plugins.shade.resource.ManifestResourceTransformer">                   
                   <mainClass>harry.NLP</mainClass>
+
                 </transformer>
               </transformers>
               <finalName>NLP</finalName>
@@ -41,25 +42,10 @@
               <transformers>
                 <transformer implementation="org.apache.maven.plugins.shade.resource.ManifestResourceTransformer">                        
                   <mainClass>harry.NLPcl</mainClass>
-                </transformer>
-              </transformers>
-              <finalName>NLPcl</finalName>
-            </configuration>  
-          </execution>
 
-          <execution>
-            <id>build-third</id>
-            <phase>package</phase>
-            <goals>
-               <goal>shade</goal>
-            </goals>   
-            <configuration>
-              <transformers>
-                <transformer implementation="org.apache.maven.plugins.shade.resource.ManifestResourceTransformer">                        
-                  <mainClass>harry.NLPTwitter</mainClass>
                 </transformer>
               </transformers>
-              <finalName>twitter</finalName>
+              <finalName>cl</finalName>
             </configuration>  
           </execution>
 

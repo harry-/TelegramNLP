@@ -47,14 +47,6 @@ public class NLPBot extends TelegramLongPollingBot {
       else {
         try {
 
-          Listener.theCloudListens(update.getMessage().getFrom().getId(), 
-            update.getMessage().getText());
-          Listener.theCloudListensToSentiments(update.getMessage().getFrom().getId(), 
-            update.getMessage().getText());
-          Listener.checkUser(update.getMessage().getFrom().getId(), 
-            update.getMessage().getFrom().getUserName(), 
-            update.getMessage().getFrom().getFirstName());
-
           SendMessage message = new SendMessage();// Create a SendMessage object with mandatory fields
           message.setChatId(update.getMessage().getChatId());
 
@@ -106,7 +98,17 @@ public class NLPBot extends TelegramLongPollingBot {
 
             else if (mode.equals("entities-sentiment"))
               message.setText(cloud.getEntSent(update.getMessage().getText()));
+          } else {
+            Listener.theCloudListens(update.getMessage().getFrom().getId(), 
+              update.getMessage().getText());
+            Listener.theCloudListensToSentiments(update.getMessage().getFrom().getId(), 
+              update.getMessage().getText());
+            Listener.checkUser(update.getMessage().getFrom().getId(), 
+              update.getMessage().getFrom().getUserName(), 
+              update.getMessage().getFrom().getFirstName());
+
           }
+
           if (message.getText() != null && !message.getText().isEmpty())
             sendMessage(message); // Call method to send the message
 
