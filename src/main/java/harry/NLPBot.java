@@ -20,7 +20,7 @@ import harry.DerbyDB;
 
 public class NLPBot extends TelegramLongPollingBot {
 
-  private String mode = "sentiment"; 
+  private StringBuilder mode = new StringBuilder("sentiment"); 
 
 
 
@@ -33,91 +33,21 @@ public class NLPBot extends TelegramLongPollingBot {
 
       DerbyDB db = new DerbyDB();
 
-      // switches
-      if (update.getMessage().getText().equals("entity")) 
-        mode="entity";
-      
-      else if (update.getMessage().getText().equals("sentiment")) 
-        mode="sentiment";
+      String output = CommandHandler.all(update.getMessage().getText(), mode)
 
-      else if (update.getMessage().getText().equals("entity sentiment")) 
-        mode="entities-sentiment";
-      
-      // commands that produce a reply
-      else {
-        try {
+      try {
 
-          SendMessage message = new SendMessage();// Create a SendMessage object with mandatory fields
-          message.setChatId(update.getMessage().getChatId());
-
-          // "normal" commands or whatever
-          if (update.getMessage().getText().equals("hello"))
-            message.setText("hello " + update.getMessage().getFrom().getUserName());
-
-          else if (update.getMessage().getText().equals("list users"))
-            message.setText(Report.userList());
-
-          else if (update.getMessage().getText().equals("all reports"))
-            message.setText(Report.allReports());
-
-          else if (update.getMessage().getText().equals("help"))
-            message.setText(displayHelp());
-
-          else if (update.getMessage().getText().startsWith("set gender")) {
-            String[] splitted = update.getMessage().getText().split(" ");
-            try {
-              db.setGender(splitted[2], splitted[3]);
-              message.setText("alright then");
-            } catch (IllegalArgumentException e) {
-              message.setText(e.getMessage());
-            }
-          }
-
-          else if (update.getMessage().getText().startsWith("report")) {
-   
-            String[] splitted = update.getMessage().getText().split(" ");
-              message.setText(Report.report(splitted[1]));
-          }
-
-          else if (update.getMessage().getText().startsWith("add twitter user")) {
-   
-            String[] splitted = update.getMessage().getText().split(" ");
-              message.setText(TwitterNLP.addTweetsToDB(splitted[3]));
-          }
+      SendMessage message = new SendMessage();// Create a SendMessage object with mandatory fields
+      message.setChatId(update.getMessage().getChatId());
 
 
-          // switch dependent commands that produce a reply (only in private chat)
-          else if (update.getMessage().getChat().isUserChat()){ 
-            GoogleCloud cloud = new GoogleCloud();
+      if (message.getText() != null && !message.getText().isEmpty())
+        sendMessage(message); // Call method to send the message
 
-            if (mode.equals("sentiment"))
-               message.setText(cloud.getSent(update.getMessage().getText()));
-
-            else if (mode.equals("entity"))
-              message.setText(cloud.getEnt(update.getMessage().getText()));
-
-            else if (mode.equals("entities-sentiment"))
-              message.setText(cloud.getEntSent(update.getMessage().getText()));
-          } else {
-            Listener.theCloudListens(update.getMessage().getFrom().getId(), 
-              update.getMessage().getText());
-            Listener.theCloudListensToSentiments(update.getMessage().getFrom().getId(), 
-              update.getMessage().getText());
-            Listener.checkUser(update.getMessage().getFrom().getId(), 
-              update.getMessage().getFrom().getUserName(), 
-              update.getMessage().getFrom().getFirstName());
-
-          }
-
-          if (message.getText() != null && !message.getText().isEmpty())
-            sendMessage(message); // Call method to send the message
-
-        } catch (TelegramApiException e) {
-          e.printStackTrace();
-        } catch (java.lang.Exception e) {
-          e.printStackTrace();
-        }
-      }
+    } catch (TelegramApiException e) {
+      e.printStackTrace();
+    } catch (java.lang.Exception e) {
+      e.printStackTrace();
     }
   }
 
