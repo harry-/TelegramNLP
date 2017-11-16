@@ -8,6 +8,7 @@ import com.beust.jcommander.JCommander;
 import com.beust.jcommander.Parameter;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
+import java.util.Scanner;
 
 
 public class NLPcl {
@@ -55,13 +56,23 @@ public class NLPcl {
                         true, 
                         1, 
                         "it me");
-      
+
     System.out.println(output);
-    try {
-      System.in.read();
-    } catch (IOException e) {
-      logger.error(e.getMessage());
-      logger.error(e.getStackTrace());
+
+    Scanner scanner=new Scanner(System.in); 
+    while (true) {
+      command = scanner.nextLine();
+      if(command.equals(""))
+          break;
+
+      output = new CommandHandlerCL().all( 
+                        command, 
+                        mode, 
+                        "harry",
+                        true, 
+                        1, 
+                        "it me");
+      System.out.println(output);
     }
   }  
 }

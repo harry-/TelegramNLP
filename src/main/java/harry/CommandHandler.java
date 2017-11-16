@@ -11,10 +11,13 @@ public class CommandHandler {
   private static Logger logger = LogManager.getLogger(); 
 
 	public String all(String command, StringBuilder mode, String user, Boolean privateChat, int id, String firstName) {
-	  
+	  logger.entry(command, mode, user, privateChat);
+    String output = "";
+
     if (command.equals("entity")) {
       mode.delete(0, mode.length()); 
       mode.append("entity");
+      logger.debug("mode set to "+mode.toString());
     }
     else if (command.equals("sentiment")) {
       mode.delete(0, mode.length()); 
@@ -25,74 +28,72 @@ public class CommandHandler {
       mode.append("entities-sentiment");
     }
     else if (command.equals("hello"))
-      return("hello " + user);
+      output = "hello " + user;
 
     else if (command.equals("list users"))
-      return(Report.userList());
+      output = Report.userList();
 
     else if (command.equals("all reports"))
-      return(Report.allReports());
+      output = Report.allReports();
 
     else if (command.equals("help"))
-      return(displayHelp());
+      output = displayHelp();
 
     else if (command.startsWith("set gender")) {
       String[] splitted = command.split(" ");
       try {
         db.setGender(splitted[2], splitted[3]);
-        return("alright then");
+        output = "alright then";
       } catch (IllegalArgumentException e) {
-        return(e.getMessage());
+        output = e.getMessage();
       }
     }
 
     else if (command.startsWith("report")) {
-
       String[] splitted = command.split(" ");
-        return(Report.report(splitted[1]));
+      output = Report.report(splitted[1]);
     }
 
     else if (command.startsWith("add twitter user")) {
-
       String[] splitted = command.split(" ");
-        return(TwitterNLP.addTweetsToDB(splitted[3]));
+      output = TwitterNLP.addTweetsToDB(splitted[3]);
     }
 
-
     // switch dependent commands that produce a reply (only in private chat)
-    else if (privateChat){ 
+    else if (privateChat) { 
       GoogleCloud cloud = new GoogleCloud();
 
-      if (mode.equals("sentiment")) {
+      if (mode.toString().equals("sentiment")) {
         try {
-          return(cloud.getSent(command));
+          output = cloud.getSent(command);
         } catch (Exception e) {
           logger.error("A previously unencountered google cloud error: "+e.getMessage());
           logger.error(e.getStackTrace());
         } 
       }
 
-      else if (mode.equals("entity"))  {
+      else if (mode.toString().equals("entity"))  {
         try {
-          return(cloud.getEnt(command));
+          output = cloud.getEnt(command);
         } catch (Exception e) {
           logger.error("A previously unencountered google cloud error: "+e.getMessage());
           logger.error(e.getStackTrace());
         } 
       }
 
-      else if (mode.equals("entities-sentiment"))
-        return(cloud.getEntSent(command));
+      else if (mode.toString().equals("entities-sentiment"))
+        output = cloud.getEntSent(command);
     } else {
       Listener.theCloudListens(id, command);
       Listener.theCloudListensToSentiments(id, command);
       Listener.checkUser(id, user, firstName);
     }
-    return "";
+    return logger.exit(output);
 	}
 
   public String displayHelp()
   {
+    logger.entry();
     String helpMessage = "";
 
     helpMessage += "This bot listens to all messages in channels that it has been added to, analyzes them using the Google Natural Language API (https://cloud.google.com/natural-language/) and stores the result in a database. You can use the following commands to interact with it:\n";
@@ -104,7 +105,7 @@ public class CommandHandler {
     helpMessage += "\nentity\nSwitch to entity analysis mode. The bot will display the results of the google entity analysis.\n";
     helpMessage += "\nsentiment\nSwitch back to sentiment analysis (the default mode)\n";
 
-    return helpMessage;
+    return logger.exit(helpMessage);
   }
 
 }

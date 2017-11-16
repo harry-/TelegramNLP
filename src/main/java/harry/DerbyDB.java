@@ -47,7 +47,8 @@ public class DerbyDB{
     Connection conn = null;
     try {      
       conn = DriverManager.getConnection(dbUrl); 
-      logger.info("Database found");      
+      logger.info("Database found");   
+      logger.debug("Url: "+dbUrl);  
     } catch (SQLException sqle) {
       if(sqle.getSQLState().equals("XJ004")) {
         logger.info("Database not found, trying to create...");
