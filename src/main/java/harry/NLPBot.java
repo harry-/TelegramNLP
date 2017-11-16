@@ -8,6 +8,11 @@ import org.telegram.telegrambots.api.objects.replykeyboard.ReplyKeyboardMarkup;
 import org.telegram.telegrambots.bots.TelegramLongPollingBot;
 import org.telegram.telegrambots.exceptions.TelegramApiException;
 
+import org.telegram.telegrambots.ApiContextInitializer;
+import org.telegram.telegrambots.TelegramBotsApi;
+
+import org.telegram.telegrambots.logging.BotsFileHandler;
+
 import java.io.InvalidObjectException;
 import java.util.concurrent.ConcurrentHashMap;
 
@@ -19,6 +24,24 @@ import harry.DerbyDB;
 public class NLPBot extends TelegramLongPollingBot {
 
   private StringBuilder mode = new StringBuilder("sentiment"); 
+
+
+  public static void main(String... args) {
+  
+    //Initialize the database
+    DerbyDB db = new DerbyDB();
+    db.checkDB();
+
+    ApiContextInitializer.init();
+
+    TelegramBotsApi botsApi = new TelegramBotsApi();
+
+    try {
+      botsApi.registerBot(new NLPBot());
+    } catch (TelegramApiException e) {
+      e.printStackTrace();
+    }
+  }
 
   //define bot behaviour 
 
