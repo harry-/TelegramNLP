@@ -13,6 +13,7 @@ import org.apache.logging.log4j.Logger;
 public class NLPcl {
 
   Logger logger = LogManager.getLogger();
+  private StringBuilder mode = new StringBuilder("sentiment"); 
 
   @Parameter(names = "-user", description = "telegram @ handle (without the @)")
   private String user;
@@ -46,34 +47,16 @@ public class NLPcl {
 
   public void commands() {
     System.out.println();
-    if (command.equals("hello")) 
-      System.out.println("hello");
-    else if (command.equals("list users")) 
-      System.out.println(Report.userList());
-    else if (command.equals("all reports")) 
-      System.out.println(Report.allReports());
-    else if (command.equals("help")) 
-      System.out.println(NLPBot.displayHelp());
-    else if (command.startsWith("set gender")) {
-      String[] splitted = command.split(" ");
-      try {
-        DerbyDB db = new DerbyDB();
-        db.setGender(splitted[2], splitted[3]);
-        System.out.println("alright then");
-      } catch (IllegalArgumentException e) {
-        logger.error(e.getMessage());
-      }
-    }
-    else if (command.startsWith("report")) {
-      String[] splitted = command.split(" ");
-      System.out.println(Report.report(splitted[1]));
-    }
-    else if (command.startsWith("add twitter user")) {
-      String[] splitted = command.split(" ");
-      System.out.println(TwitterNLP.addTweetsToDB(splitted[3]));
-    } else
-      System.out.println("No command found. Try 'help'.");
-    System.out.println();
+
+    String output = new CommandHandler().all( 
+                        command, 
+                        mode, 
+                        "harry",
+                        true, 
+                        1, 
+                        "it me");
+      
+    System.out.println(output);
     try {
       System.in.read();
     } catch (IOException e) {

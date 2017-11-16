@@ -33,8 +33,12 @@ public class NLPBot extends TelegramLongPollingBot {
 
       DerbyDB db = new DerbyDB();
 
-      String output = CommandHandler.all(update.getMessage().getText(), mode)
-
+      String output = new CommandHandler().all( update.getMessage().getText(), 
+                                                mode, 
+                                                update.getMessage().getFrom().getUserName(),
+                                                update.getMessage().getChat().isUserChat(), 
+                                                update.getMessage().getFrom().getId(), 
+                                                update.getMessage().getFrom().getFirstName());
       try {
 
       SendMessage message = new SendMessage();// Create a SendMessage object with mandatory fields
@@ -44,10 +48,11 @@ public class NLPBot extends TelegramLongPollingBot {
       if (message.getText() != null && !message.getText().isEmpty())
         sendMessage(message); // Call method to send the message
 
-    } catch (TelegramApiException e) {
-      e.printStackTrace();
-    } catch (java.lang.Exception e) {
-      e.printStackTrace();
+      } catch (TelegramApiException e) {
+        e.printStackTrace();
+      } catch (java.lang.Exception e) {
+        e.printStackTrace();
+      }
     }
   }
 
