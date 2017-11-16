@@ -48,7 +48,7 @@ public class NLPcl {
   public void commands() {
     System.out.println();
 
-    String output = new CommandHandler().all( 
+    String output = new CommandHandlerCL().all( 
                         command, 
                         mode, 
                         "harry",

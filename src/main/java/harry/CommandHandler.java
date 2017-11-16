@@ -91,7 +91,7 @@ public class CommandHandler {
     return "";
 	}
 
-  public static String displayHelp()
+  public String displayHelp()
   {
     String helpMessage = "";
 

@@ -28,3 +28,5 @@ Set gender reports "user x not found" despite working just fine.
 
 A better "three fav things" algorithm.
 
+Seperate classes for each command + help messages etc.
+
