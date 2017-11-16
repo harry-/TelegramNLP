@@ -308,9 +308,9 @@ public class DerbyDB{
       if(tableAlreadyExists(e)) { //check if the exception is because of pre-existing table.
         String[] words = sql.split(" ");
 
-        System.out.println("Table "+words[2]+" already exists.  No need to recreate");
+        logger.info("Table "+words[2]+" already exists.  No need to recreate");
       } else {
-        System.out.println(e.getMessage() + " : " + e.getStackTrace());
+        logger.error(e.getMessage() + " : " + e.getStackTrace());
       }
     } finally {
         // the connection should be closed here

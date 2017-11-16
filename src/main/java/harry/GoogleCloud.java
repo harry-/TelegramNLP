@@ -125,10 +125,10 @@ public class GoogleCloud {
     
     } catch (IOException IOe)
     {
-      System.err.println("Couldnt reach THE CLOUD probably\nError message: "+IOe.toString());
+      logger.error("Couldnt reach THE CLOUD probably\nError message: "+IOe.toString());
     } catch (Exception e)
     {
-      System.err.println("Really no idea, why the Google API throws a generic Exception here\n Error message: "+e.toString());
+      logger.error("Really no idea, why the Google API throws a generic Exception here\n Error message: "+e.toString());
     }
     return answer;    
   }
@@ -148,10 +148,10 @@ public class GoogleCloud {
       entities = response.getEntitiesList();   
     } catch (IOException IOe)
     {
-      System.err.println("Couldnt reach THE CLOUD probably\nError message: "+IOe.toString());
+      logger.error("Couldnt reach THE CLOUD probably\nError message: "+IOe.toString());
     } catch (Exception e)
     {
-      System.err.println("Really no idea, why the Google API throws a generic Exception here\n Error message: "+e.toString());
+      logger.error("Really no idea, why the Google API throws a generic Exception here\n Error message: "+e.toString());
     }
     return entities;
   }

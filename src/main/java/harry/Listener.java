@@ -13,7 +13,12 @@ import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.util.List;
 
+import org.apache.logging.log4j.Logger;
+import org.apache.logging.log4j.LogManager;
+
 public class Listener {
+
+  private static Logger logger = LogManager.getLogger(); 
 
   public static void theCloudListens(int userID, String text) {
 
@@ -53,10 +58,10 @@ public class Listener {
 
     Sentiment sentiment = cloud.getSentimentObject(text);
 
-    String answer = ", Score: " + sentiment.getScore();
+    String answer = "Score: " + sentiment.getScore();
     answer += ", Magnitude: " + sentiment.getMagnitude();
 
-    System.out.println(answer);
+    logger.info(answer);
 
     db.storeSentiment(userID,
       sentiment.getMagnitude(), 
