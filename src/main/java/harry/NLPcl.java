@@ -10,7 +10,6 @@ import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import java.util.Scanner;
 
-
 public class NLPcl {
 
   Logger logger = LogManager.getLogger();
@@ -22,57 +21,39 @@ public class NLPcl {
   private String command = "none";
 
   public static void main(String... args) throws Exception {
-
+    
   	NLPcl nlpcl = new NLPcl();
     JCommander.newBuilder()
     	.addObject(nlpcl)
-        .build()
-        .parse(args);
+      .build()
+      .parse(args);
   
     //Initialize the database
     DerbyDB db = new DerbyDB();
     db.checkDB();
 
     nlpcl.commands();
-    
-   // nlpcl.report();
-
-  }
-
-  public void report() {
-  	Report report = new Report();
-    System.out.println(report.report(user));
-    System.out.println(report.userList());
-    System.out.println(report.allReports());
   }
 
   public void commands() {
     System.out.println();
-
-    String output = new CommandHandlerCL().all( 
-                        command, 
-                        mode, 
-                        "harry",
-                        true, 
-                        1, 
-                        "it me");
-
-    System.out.println(output);
+    if (command.equals("none")) 
+      command = "hello";
 
     Scanner scanner=new Scanner(System.in); 
     while (true) {
-      command = scanner.nextLine();
       if(command.equals(""))
-          break;
+        break;
 
-      output = new CommandHandlerCL().all( 
-                        command, 
-                        mode, 
-                        "harry",
-                        true, 
-                        1, 
-                        "it me");
+      String output = new CommandHandlerCL().all( 
+                command, 
+                mode, 
+                "harry",
+                true, 
+                1, 
+                "it me");
       System.out.println(output);
+      command = scanner.nextLine();
     }
   }  
 }
