@@ -14,19 +14,12 @@ public class CommandHandler {
 	  logger.entry(command, mode, user, privateChat);
     String output = "";
 
-    if (command.equals("entity")) {
+    if (command.matches("entity|sentiment|entities-sentiment")) {
       mode.delete(0, mode.length()); 
-      mode.append("entity");
+      mode.append(command);
       logger.debug("mode set to "+mode.toString());
     }
-    else if (command.equals("sentiment")) {
-      mode.delete(0, mode.length()); 
-      mode.append("setiment");
-    }
-    else if (command.equals("entity sentiment")) {
-      mode.delete(0, mode.length()); 
-      mode.append("entities-sentiment");
-    }
+
     else if (command.equals("hello"))
       output = "hello " + user;
 
