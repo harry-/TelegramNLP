@@ -180,21 +180,6 @@ public class Report {
 	}
 
  /**
-	* Stuff info about all user records in a string
-	*
-	* @return 					a verbose list
-	*/
-	public static String userList() {
-		String output = "";
-
-	  Dao<Telegramuser, String> userdao = OrmLite.getTelegramUserDao();
-	  for (Telegramuser user : userdao) {
-      output+=user.getHandle()+", "+user.getFirstname()+" ("+user.getUserid()+")\n";
-    }
-    return output;
-	}
-
- /**
 	* Report aggregator
 	* String reports for all available user together
 	*

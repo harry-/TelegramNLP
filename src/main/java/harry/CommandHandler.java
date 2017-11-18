@@ -3,6 +3,8 @@ package harry;
 import org.apache.logging.log4j.Logger;
 import org.apache.logging.log4j.LogManager;
 
+import harry.ListUsers;
+
 
 public class CommandHandler {
 
@@ -23,8 +25,8 @@ public class CommandHandler {
     else if (command.equals("hello"))
       output = "hello " + user;
 
-    else if (command.equals("list users"))
-      output = Report.userList();
+    else if (command.startsWith("list users"))
+      output = new ListUsers(command).run();
 
     else if (command.equals("all reports"))
       output = Report.allReports();

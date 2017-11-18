@@ -1,12 +1,13 @@
-public class Command {
+package harry;
 
-	private String help = "";
+abstract class Command {
 
-	public String Run() {
-		return "";
-	}
+	private String help = "generic help";
+	public Boolean helpFlag = false;
 
 	public String displayHelp() {
-		return "";
+		return help;
 	}
+
+	abstract String run();
 }
