@@ -19,15 +19,14 @@ public class AllReports extends Command {
 	* @return 					lots of reports all strung together
 	*/
 	public String run() {
+		if (this.helpFlag)
+			return help;
 		String output = "";
 
 	  Dao<Telegramuser, String> userdao = OrmLite.getTelegramUserDao();
 	  for (Telegramuser user : userdao) {
 	  	output += Report.report(user.getHandle()) +"\n\n";
     }
-
-    if (this.helpFlag == false)
-    	return output;
-    return help;
+    return output;
 	}
 }

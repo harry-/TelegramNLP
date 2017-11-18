@@ -35,13 +35,7 @@ public class CommandHandler {
       output = displayHelp();
 
     else if (command.startsWith("set gender")) {
-      String[] splitted = command.split(" ");
-      try {
-        db.setGender(splitted[2], splitted[3]);
-        output = "alright then";
-      } catch (IllegalArgumentException e) {
-        output = e.getMessage();
-      }
+      output = new SetGender(command).run();
     }
 
     else if (command.startsWith("report")) {

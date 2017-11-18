@@ -180,22 +180,6 @@ public class Report {
 	}
 
  /**
-	* Report aggregator
-	* String reports for all available user together
-	*
-	* @return 					lots of reports all strung together
-	*/
-	public static String allReports() {
-		String output = "";
-
-	  Dao<Telegramuser, String> userdao = OrmLite.getTelegramUserDao();
-	  for (Telegramuser user : userdao) {
-	  	output += report(user.getHandle()) +"\n\n";
-    }
-    return output;
-	}
-
- /**
 	* Capitalize the first character of a string
 	*
 	* @param	input 		some string

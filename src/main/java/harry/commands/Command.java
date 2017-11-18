@@ -2,7 +2,9 @@ package harry;
 
 abstract class Command {
 
-	private String help = "generic help";
+	String help = "generic help";
+	String commandString;
+
 	public Boolean helpFlag = false;
 
 	public String displayHelp() {

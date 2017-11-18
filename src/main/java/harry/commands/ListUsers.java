@@ -18,15 +18,14 @@ public class ListUsers extends Command {
 	* @return 					a verbose list
 	*/
 	public String run() {
+		if (this.helpFlag)
+			return help;
 		String output = "";
 
 	  Dao<Telegramuser, String> userdao = OrmLite.getTelegramUserDao();
 	  for (Telegramuser user : userdao) {
       output+=user.getHandle()+", "+user.getFirstname()+" ("+user.getUserid()+")\n";
     }
-
-    if (this.helpFlag == false)
-    	return output;
-    return help;
+    return output;
 	}
 }
