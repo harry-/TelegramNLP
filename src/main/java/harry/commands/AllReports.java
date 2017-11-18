@@ -1,29 +1,29 @@
 package harry;
 
 import com.j256.ormlite.dao.Dao;
-import harry.Command;
 
-public class ListUsers extends Command {
+public class AllReports extends Command {
 
-	private String help = "Displays a list of all users stored in the database.";
+	private String help = "Shows reports for all available users.";
 
 
-	public ListUsers(String command) {
+	public AllReports(String command) {
 		if (command.matches(".*help.*")) 
 			helpFlag = true;
 	}
 
  /**
-	* Stuff info about all user records in a string
+	* Report aggregator
+	* String reports for all available user together
 	*
-	* @return 					a verbose list
+	* @return 					lots of reports all strung together
 	*/
 	public String run() {
 		String output = "";
 
 	  Dao<Telegramuser, String> userdao = OrmLite.getTelegramUserDao();
 	  for (Telegramuser user : userdao) {
-      output+=user.getHandle()+", "+user.getFirstname()+" ("+user.getUserid()+")\n";
+	  	output += Report.report(user.getHandle()) +"\n\n";
     }
 
     if (this.helpFlag == false)
