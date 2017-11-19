@@ -66,7 +66,7 @@ public class DerbyDB{
   }
 
 
-  public void storeAnalysis(int userid, String entity, double salience, double magnitude, double score, LocalDate date, String metadata, String type) {
+  public void storeAnalysis(long userid, String entity, double salience, double magnitude, double score, LocalDate date, String metadata, String type) {
     try {
       Connection conn = connectionToDerby();
 
@@ -86,7 +86,7 @@ public class DerbyDB{
   }
 
 
-  public void storeSentiment(int userid, double magnitude, double score, LocalDate date) {
+  public void storeSentiment(long userid, double magnitude, double score, LocalDate date) {
     try {
       Connection conn = connectionToDerby();
       Statement stmt = conn.createStatement();
@@ -120,7 +120,7 @@ public class DerbyDB{
       Connection conn = connectionToDerby();
       Statement stmt = conn.createStatement();
 
-      int userid = getUserId(user);
+      long userid = getUserId(user);
 
       String sql = "SELECT entity FROM entitysentiment WHERE userid = "+userid;
 
@@ -159,7 +159,7 @@ public class DerbyDB{
       Connection conn = connectionToDerby();
       Statement stmt = conn.createStatement();
 
-      int userid = getUserId(handle);
+      long userid = getUserId(handle);
 
       String sql = "SELECT entity, COUNT(*) AS num FROM entitysentiment WHERE userid = "+userid+" GROUP BY entity ORDER BY NUM DESC FETCH FIRST ROW ONLY";
    
@@ -177,7 +177,7 @@ public class DerbyDB{
  * Retrieve the username corresponding to a given userid.
  * Returns null if there is no entry.
  */
-  public String getUsername(int userid) {
+  public String getUsername(long userid) {
 
     try {
       Connection conn = connectionToDerby();
@@ -199,7 +199,7 @@ public class DerbyDB{
  * Retrieve the userid corresponding to a given handle.
  * Returns 0 if there is no entry.
  */
-  public int getUserId(String userhandle) {
+  public long getUserId(String userhandle) {
 
     try {
       Connection conn = connectionToDerby();
@@ -211,7 +211,7 @@ public class DerbyDB{
       ResultSet rs = stmt.executeQuery(sql);
 
       if (rs.next()) 
-        return rs.getInt("userid");
+        return rs.getLong("userid");
 
     } catch (SQLException e) {
       e.printStackTrace();
@@ -254,7 +254,7 @@ public class DerbyDB{
  /**
   * Create a new User
   */
-  public void createUser(int userid, String username, String firstname) {
+  public void createUser(long userid, String username, String firstname) {
    
     try {
       Connection conn = connectionToDerby();
@@ -276,7 +276,7 @@ public class DerbyDB{
  * Create db structure on first run
  */
   public void initializeTables() {
-    createTable("CREATE TABLE Telegramuser (Userid int, Firstname varchar(40), Secondname varchar(40), Handle varchar(40), Gender varchar(10))");
+    createTable("CREATE TABLE Telegramuser (Userid bigint, Firstname varchar(40), Secondname varchar(40), Handle varchar(40), Gender varchar(10))");
     createTable("create table sentiment (index INTEGER NOT NULL GENERATED ALWAYS AS IDENTITY (START WITH 1, INCREMENT BY 1), userid int, magnitude double, score double, date date)");
     createTable("create table entitysentiment (index INTEGER NOT NULL GENERATED ALWAYS AS IDENTITY (START WITH 1, INCREMENT BY 1), userid int, entity varchar(100), salience double, magnitude double, score double, date date, metadata varchar(100), type varchar(40))");
     logger.info("Tables created");
@@ -333,7 +333,7 @@ public class DerbyDB{
       Connection conn = connectionToDerby();
       Statement stmt = conn.createStatement();
 
-      int userid = getUserId(handle);
+      long userid = getUserId(handle);
 
       String sql = "SELECT AVG(score) as average FROM sentiment WHERE userid = "+userid;
       logger.debug(sql);

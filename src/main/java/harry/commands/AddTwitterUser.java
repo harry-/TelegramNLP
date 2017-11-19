@@ -3,7 +3,6 @@ package harry;
 import twitter4j.*;
 
 import java.util.List;
-import static java.lang.Math.toIntExact;
 
 import org.apache.logging.log4j.Logger;
 import org.apache.logging.log4j.LogManager;
@@ -40,7 +39,7 @@ public class AddTwitterUser extends Command {
 
     try {
       User tuser = twitter.showUser(user);
-      String check = Listener.checkUser(toIntExact(tuser.getId()),tuser.getScreenName(), tuser.getName());
+      String check = Listener.checkUser(tuser.getId(),tuser.getScreenName(), tuser.getName());
 
       if (check.equals("exists"))
         return "User has been added previously.";
@@ -54,8 +53,8 @@ public class AddTwitterUser extends Command {
       for (Status status : statuses) {
         logger.debug(status.getUser().getName() + ":" +
                              status.getText());
-        Listener.theCloudListensToSentiments(toIntExact(tuser.getId()), status.getText());
-        Listener.theCloudListens(toIntExact(tuser.getId()), status.getText());     
+        Listener.theCloudListensToSentiments(tuser.getId(), status.getText());
+        Listener.theCloudListens(tuser.getId(), status.getText());     
       }
 
       output += statuses.size() + " of "+tuser.getScreenName()+"'s tweets have been analyzed.";

@@ -21,7 +21,7 @@ public class NLPcl {
   private String command = "none";
 
   public static void main(String... args) throws Exception {
-    
+
   	NLPcl nlpcl = new NLPcl();
     JCommander.newBuilder()
     	.addObject(nlpcl)
@@ -42,7 +42,7 @@ public class NLPcl {
 
     Scanner scanner=new Scanner(System.in); 
     while (true) {
-      if(command.equals(""))
+      if(command.equals(""|"exit"))
         break;
 
       String output = new CommandHandlerCL().all( 
