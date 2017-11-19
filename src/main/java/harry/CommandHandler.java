@@ -41,8 +41,8 @@ public class CommandHandler {
       output = new Report(command).run();
 
     else if (command.startsWith("add twitter user")) {
-      String[] splitted = command.split(" ");
-      output = TwitterNLP.addTweetsToDB(splitted[3]);
+      output = new AddTwitterUser(command).run();
+
     }
 
     // switch dependent commands that produce a reply (only in private chat)
