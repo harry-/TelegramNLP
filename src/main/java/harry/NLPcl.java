@@ -53,7 +53,9 @@ public class NLPcl {
                 1, 
                 "it me");
       System.out.println(output);
+      System.out.print("\n>");
       command = scanner.nextLine();
+      System.out.println();
     }
   }  
 }

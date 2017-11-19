@@ -6,7 +6,7 @@ import com.j256.ormlite.table.DatabaseTable;
 @DatabaseTable(tableName = "telegramuser")
 public class Telegramuser {
     @DatabaseField(id = true)
-    private int USERID;
+    private long USERID;
     
     @DatabaseField()
     private String FIRSTNAME;
@@ -25,17 +25,17 @@ public class Telegramuser {
     	// all persisted classes must define a no-arg constructor with at least package visibility
     }
 
-		public Telegramuser(int userid, String firstname, String handle) {
+		public Telegramuser(long userid, String firstname, String handle) {
 			this.USERID = userid;
 			this.HANDLE = handle;
 			this.FIRSTNAME = firstname;
 		}
 
-		public int getUserid() {
+		public long getUserid() {
 			return USERID;
 		}
 
-		public void setUserid(int userid) {
+		public void setUserid(long userid) {
 			this.USERID=userid;
 		}
 

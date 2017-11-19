@@ -44,7 +44,7 @@ public class AddTwitterUser extends Command {
       if (check.equals("exists"))
         return "User has been added previously.";
 
-      logger.info("Analyzing "+tuser.getScreenName()+"'s tweets. This will take awhile");
+      logger.info("Analyzing "+tuser.getScreenName()+"'s tweets. This will take a while.");
 
       Paging p = new Paging();
       p.setCount(800);

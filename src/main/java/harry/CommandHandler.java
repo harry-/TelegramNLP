@@ -82,12 +82,12 @@ public class CommandHandler {
     logger.entry();
     String helpMessage = "";
 
-    helpMessage += "This bot listens to all messages in channels that it has been added to, analyzes them using the Google Natural Language API (https://cloud.google.com/natural-language/) and stores the result in a database. You can use the following commands to interact with it:\n";
+    helpMessage += "\n\nThis bot listens to all messages in channels that it has been added to, analyzes them using the Google Natural Language API (https://cloud.google.com/natural-language/) and stores the result in a database. You can use the following commands to interact with it:\n";
     helpMessage += "\nlist users";
     helpMessage += "\nreport [user]";
     helpMessage += "\nall reports";
     helpMessage += "\nadd twitter user [twitter handle]";
-    helpMessage += "\nType [command -help] to display more information about a specific command.\nExamples:\tadd twitter user -help\t\tall reports -help";
+    helpMessage += "\n\nType [command -help] to display more information about a specific command.\nExamples:\tadd twitter user -help\n\t\tall reports -help";
     helpMessage += "\n\nIn addition you can also use the bot as a basic interface to some functions of the Google Language API. By default the bot will provide the sentiment analysis result for messages you send to it. Use the following commands to switch to a different mode:\n";
     helpMessage += "\nentity sentiment\nUse this command to switch to entity sentiment analysis mode. The bot will display the results of the google entity sentiment analysis in reply to your text messages from now on.\n";
     helpMessage += "\nentity\nSwitch to entity analysis mode. The bot will display the results of the google entity analysis.\n";

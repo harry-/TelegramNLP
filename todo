@@ -4,29 +4,33 @@ Rename the package.
 
 (No metadata retrieved from enitity sentiment analysis (guess thats only available in entity analysis though).
 
-Dont store direct messages to the bot in the db.
+[DONE] Dont store direct messages to the bot in the db.
 
 [DONE] Log sentiment analysis in seperate table.
 
 [DONE] Add user names to db (in a separate table?).
 
-(Reporting from the command line.)
+[DONE] Reporting from the command line.
 
-(Twitter :^)
+[DONE] Twitter :^)
 
-[done]Add categories as a table field (like [Work_Of_Art])
+[DONE]Add categories as a table field (like [Work_Of_Art])
 
 The final report should be something like this: "Harry likes a, b and d. He dislikes e, f and g". He talks a lot about h. His favourite artist is i and his favourite work of art is j. He seems to generally be in a better mood than last week."
 
-[done]Pronouns.
+[DONE]Pronouns.
 
 The db check doesnt notice if there is only read access to the db, it seems, i.e. the program crashes while squirrel has an open connection to the db (ERROR XSDB6: Another instance of Derby may have already booted the database).
 
 Similar problem when another instance is using the telegram token.
 
-Set gender reports "user x not found" despite working just fine.
+[DONE] Set gender reports "user x not found" despite working just fine.
 
 A better "three fav things" algorithm.
 
 Seperate classes for each command + help messages etc.
+
+Charts
+
+A dedicated twitter account.
 
