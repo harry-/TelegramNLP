@@ -42,7 +42,7 @@ public class NLPcl {
 
     Scanner scanner=new Scanner(System.in); 
     while (true) {
-      if(command.equals(""|"exit"))
+      if(command.equals("") || command.equals("exit") )
         break;
 
       String output = new CommandHandlerCL().all( 
