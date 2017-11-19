@@ -22,6 +22,8 @@ Here's an example of how to set the environment variables in bash:
     export TELEGRAM_TOKEN=<your token>
     export TELEGRAM_BOT=<your bot name>
 
+For twitter functionality twitter4j.properties file with your [twitter api authentication](https://apps.twitter.com/) needs to be placed in directly in the project folder (where this readme file also resides). 
+
 Finally you'll also need [maven](https://maven.apache.org/) available on your system.
 
 ## Compilation
