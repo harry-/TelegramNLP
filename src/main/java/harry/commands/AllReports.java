@@ -24,9 +24,10 @@ public class AllReports extends Command {
 		String output = "";
 
 	  Dao<Telegramuser, String> userdao = OrmLite.getTelegramUserDao();
-	  for (Telegramuser user : userdao) {
-	  	output += Report.report(user.getHandle()) +"\n\n";
-    }
+	  
+	  for (Telegramuser user : userdao) 
+	  	output += new Report("report "+user.getHandle()).run()+"\n\n";
+    
     return output;
 	}
 }

@@ -2,24 +2,29 @@ package harry;
 
 import com.j256.ormlite.dao.Dao;
 
-import org.apache.logging.log4j.Logger;
-import org.apache.logging.log4j.LogManager;
+public class Report extends Command {
 
-import java.sql.SQLException;
-import harry.DerbyDB;
+	private String help = "Displays the nlp report of a given user.\nExample: report harry";
 
-public class Report {
-	
-	private static Logger logger = LogManager.getLogger(); 
+	public Report(String command) {
+		this.commandString = command;
+		if (command.matches(".*help.*")) 
+			helpFlag = true;
+	}
 
  /**
 	* Create a nice report
 	* Aggregates all the available reports for a given user
 	*
-	* @param	handle 	userhandle
 	* @return 				a verbose report
 	*/
-	public static String report(String handle) {
+	public String run() {
+		if (this.helpFlag)
+			return help;
+
+    String[] splitted = commandString.split(" ");
+    String handle = splitted[1];
+
 		String report = "This will be the report.";
 
 		report = 	capitalize(entitySentiment(handle)) +
@@ -30,6 +35,7 @@ public class Report {
 
 		return report;
 	}
+
 
  /**
 	* The three most and least favourite things
@@ -199,4 +205,4 @@ public class Report {
 		return input.substring(0, 1).toLowerCase() + input.substring(1);
 	}
 }
-
+    

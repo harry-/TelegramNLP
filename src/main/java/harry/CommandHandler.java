@@ -34,14 +34,11 @@ public class CommandHandler {
     else if (command.equals("help"))
       output = displayHelp();
 
-    else if (command.startsWith("set gender")) {
+    else if (command.startsWith("set gender")) 
       output = new SetGender(command).run();
-    }
 
-    else if (command.startsWith("report")) {
-      String[] splitted = command.split(" ");
-      output = Report.report(splitted[1]);
-    }
+    else if (command.startsWith("report")) 
+      output = new Report(command).run();
 
     else if (command.startsWith("add twitter user")) {
       String[] splitted = command.split(" ");
