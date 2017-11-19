@@ -8,7 +8,7 @@ public class AllReports extends Command {
 
 
 	public AllReports(String command) {
-		if (command.matches(".*help.*")) 
+		if (command.matches(".*-help.*")) 
 			helpFlag = true;
 	}
 

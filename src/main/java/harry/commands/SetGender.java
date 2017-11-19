@@ -10,7 +10,7 @@ public class SetGender extends Command {
 
 	public SetGender(String command) {
 		this.commandString = command;
-		if (command.matches(".*help.*")) 
+		if (command.matches(".*-help.*")) 
 			helpFlag = true;
 	}
 

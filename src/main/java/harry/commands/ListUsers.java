@@ -8,7 +8,7 @@ public class ListUsers extends Command {
 
 
 	public ListUsers(String command) {
-		if (command.matches(".*help.*")) 
+		if (command.matches(".*-help.*")) 
 			helpFlag = true;
 	}
 

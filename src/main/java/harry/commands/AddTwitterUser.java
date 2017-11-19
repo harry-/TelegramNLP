@@ -16,7 +16,7 @@ public class AddTwitterUser extends Command {
 
 	public AddTwitterUser(String command) {
 		this.commandString = command;
-		if (command.matches(".*help.*")) 
+		if (command.matches(".*-help.*")) 
 			helpFlag = true;
 	}
 
