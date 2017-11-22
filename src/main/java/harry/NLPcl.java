@@ -2,6 +2,7 @@ package harry;
 
 import harry.DerbyDB;
 import harry.NLPBot;
+import harry.Date;
 import java.sql.SQLException;
 import java.io.IOException;
 import com.beust.jcommander.JCommander;
@@ -31,6 +32,8 @@ public class NLPcl {
     //Initialize the database
     DerbyDB db = new DerbyDB();
     db.checkDB();
+
+    Date.date();
 
     nlpcl.commands();
   }
