@@ -55,6 +55,7 @@ public class GoogleCloud {
       logger.debug(e.getStackTrace());
     } catch (Exception e) {
       logger.error("Really no idea, why the Google API throws a generic Exception here\n Error message: "+e.toString());
+      
       logger.debug(e.getStackTrace());    
     }
     return(sentiment);

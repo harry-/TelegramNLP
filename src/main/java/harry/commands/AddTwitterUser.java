@@ -7,6 +7,9 @@ import java.util.List;
 import org.apache.logging.log4j.Logger;
 import org.apache.logging.log4j.LogManager;
 
+import java.time.*;
+import java.time.temporal.IsoFields;
+
 public class AddTwitterUser extends Command {
 
 	private static Logger logger = LogManager.getLogger();
@@ -47,13 +50,19 @@ public class AddTwitterUser extends Command {
       logger.info("Analyzing "+tuser.getScreenName()+"'s tweets. This will take a while.");
 
       Paging p = new Paging();
-      p.setCount(800);
+      p.setCount(200);
       List<Status> statuses = twitter.getUserTimeline(tuser.getId(), p);
       logger.info("Showing home timeline.");
+
       for (Status status : statuses) {
         logger.debug(status.getUser().getName() + ":" +
                              status.getText());
-        Listener.theCloudListensToSentiments(tuser.getId(), status.getText());
+
+        logger.info(status.getCreatedAt().toString());
+
+
+        Listener.theCloudListensToSentiments(tuser.getId(), status.getText(),status.getCreatedAt().toInstant().atZone(ZoneId.systemDefault()).toLocalDate());
+
         Listener.theCloudListens(tuser.getId(), status.getText());     
       }
 

@@ -37,7 +37,7 @@ public class Listener {
       answer += ", Magnitude: " + entity.getSentiment().getMagnitude();
       answer += ", Type: " + entity.getType().name();
 
-      System.out.println(answer);
+      logger.debug(answer);
 
       db.storeAnalysis(userID,
         entity.getName(),
@@ -48,20 +48,17 @@ public class Listener {
         entity.getType().name());
     }
   }
-  public static void theCloudListensToSentiments(long userID, String text) {
+  public static void theCloudListensToSentiments(long userID, String text, LocalDate date) {
 
     GoogleCloud cloud = new GoogleCloud();
     DerbyDB db = new DerbyDB();
-
-    LocalDateTime currentTime = LocalDateTime.now();
-    LocalDate date = currentTime.toLocalDate();
 
     Sentiment sentiment = cloud.getSentimentObject(text);
 
     String answer = "Score: " + sentiment.getScore();
     answer += ", Magnitude: " + sentiment.getMagnitude();
 
-    logger.info(answer);
+    logger.debug(answer);
 
     db.storeSentiment(userID,
       sentiment.getMagnitude(), 

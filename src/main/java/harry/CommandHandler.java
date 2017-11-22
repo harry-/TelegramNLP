@@ -3,6 +3,9 @@ package harry;
 import org.apache.logging.log4j.Logger;
 import org.apache.logging.log4j.LogManager;
 
+import java.time.LocalDate;
+import java.time.LocalDateTime;
+
 import harry.commands.*;
 
 
@@ -70,8 +73,13 @@ public class CommandHandler {
       else if (mode.toString().equals("entities-sentiment"))
         output = cloud.getEntSent(command);
     } else {
+
+      LocalDateTime currentTime = LocalDateTime.now();
+      LocalDate date = currentTime.toLocalDate();
+
+
       Listener.theCloudListens(id, command);
-      Listener.theCloudListensToSentiments(id, command);
+      Listener.theCloudListensToSentiments(id, command, date);
       Listener.checkUser(id, user, firstName);
     }
     return logger.exit(output);
