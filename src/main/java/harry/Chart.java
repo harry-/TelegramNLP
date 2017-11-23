@@ -6,11 +6,18 @@ import org.knowm.xchart.style.Styler;
 import org.knowm.xchart.style.*;
 import org.knowm.xchart.style.colors.*;
 
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
+
+import java.util.Arrays;
+
 
 /**
  * Creates a simple Chart using QuickChart
  */
 public class Chart {
+
+  Logger logger = LogManager.getLogger();
 
   public static void chart() throws Exception {
 
@@ -27,13 +34,16 @@ public class Chart {
     new SwingWrapper(chart).displayChart();
     
   }
-  public static void chart(double[] xData, double[] yData) throws Exception {
+  public void chart(double[] xData, double[] yData) throws Exception {
 
     // Create Chart
     XYChart chart = QuickChart.getChart("mood board", "time", "mood", "y(x)", xData, yData);
     chart.getStyler().setPlotBackgroundColor(ChartColor.getAWTColor(ChartColor.BLACK));
 
     BitmapEncoder.saveBitmap(chart, "./pic", BitmapFormat.PNG);
+
+    logger.info("x values: " + Arrays.toString(xData));
+    logger.info("y values: " + Arrays.toString(yData));
     
     // Show it
     new SwingWrapper(chart).displayChart();

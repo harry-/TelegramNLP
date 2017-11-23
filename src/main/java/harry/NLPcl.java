@@ -53,13 +53,10 @@ public class NLPcl {
       idx++;
     }
 
-    Double[] xArray = new Double[ x.size() ];
-    x.toArray( xArray );
+    double[] xArray = x.stream().mapToDouble(d -> d).toArray(); 
+    double[] yArray = y.stream().mapToDouble(d -> d).toArray(); 
 
-    Double[] yArray = new Double[ y.size() ];
-    y.toArray( yArray );
-
-    Chart.chart(x, y);
+    new Chart().chart(xArray, yArray);
 
     nlpcl.commands();
   }

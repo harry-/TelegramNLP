@@ -8,5 +8,6 @@ derby.log
 prod
 *.properties
 out.txt
-
 command.sh
+*.png
+pic.png
