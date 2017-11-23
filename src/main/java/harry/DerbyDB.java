@@ -321,8 +321,7 @@ public class DerbyDB{
   /**
    * Retrieve average sentiment score
    *
-   * @param store   either ASC or DESC
-   * @param top     get the first [top] results of the query 
+   * @param handle  user name
    * @return entity names as an array of strings
    */
   public Double getAverageSentiment(String handle) {
@@ -335,7 +334,7 @@ public class DerbyDB{
 
       long userid = getUserId(handle);
 
-      String sql = "SELECT AVG(score) as average FROM sentiment WHERE userid = "+userid;
+      String sql = "SELECT AVG(score*magnitude) as average FROM sentiment WHERE userid = "+userid;
       logger.debug(sql);
 
       ResultSet rs = stmt.executeQuery(sql);
@@ -347,6 +346,34 @@ public class DerbyDB{
       e.printStackTrace();
     }
     return output;
+
+  }
+
+  /**
+   * Retrieve average sentiment score
+   *
+   * @param handle  user name
+   * @param groupBy group by clause field
+   * @return entity names as an array of strings
+   */
+  public ResultSet getAverageSentiment(String handle, String groupBy) {
+    ResultSet rs = null;
+
+    try {
+      Connection conn = connectionToDerby();
+      Statement stmt = conn.createStatement();
+
+      long userid = getUserId(handle);
+
+      String sql = "SELECT date, AVG(score*magnitude) as average FROM sentiment WHERE userid = "+userid+ " group by "+groupBy;
+      logger.debug(sql);
+
+      rs = stmt.executeQuery(sql);
+  
+    } catch (SQLException e) {
+      e.printStackTrace();
+    }
+    return rs;
 
   }
 

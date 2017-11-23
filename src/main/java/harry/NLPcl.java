@@ -10,6 +10,9 @@ import com.beust.jcommander.Parameter;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import java.util.Scanner;
+import java.sql.ResultSet;
+import java.util.List;
+import java.util.ArrayList;
 
 public class NLPcl {
 
@@ -34,6 +37,29 @@ public class NLPcl {
     db.checkDB();
 
     Date.date();
+    //Chart.chart();
+
+    List<Double> x = new ArrayList<Double>();
+    List<Double> y = new ArrayList<Double>();
+
+    ResultSet rs = db.getAverageSentiment("realDonaldTrump", "date"); 
+
+    double idx = 0;
+
+    while(rs.next()) {
+      x.add(idx);
+      y.add(rs.getDouble("average"));
+      System.out.println(rs.getDouble("average") + "/"+ rs.getDate("date"));
+      idx++;
+    }
+
+    Double[] xArray = new Double[ x.size() ];
+    x.toArray( xArray );
+
+    Double[] yArray = new Double[ y.size() ];
+    y.toArray( yArray );
+
+    Chart.chart(x, y);
 
     nlpcl.commands();
   }
