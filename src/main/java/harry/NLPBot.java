@@ -12,6 +12,9 @@ import org.telegram.telegrambots.ApiContextInitializer;
 import org.telegram.telegrambots.TelegramBotsApi;
 import org.telegram.telegrambots.logging.BotsFileHandler;
 
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
+
 import java.io.File;
 import java.io.InvalidObjectException;
 import java.util.concurrent.ConcurrentHashMap;
@@ -23,12 +26,11 @@ import harry.DerbyDB;
 
 public class NLPBot extends TelegramLongPollingBot {
 
+  private static Logger logger = LogManager.getLogger();
   private StringBuilder mode = new StringBuilder("sentiment"); 
-
 
   public static void main(String... args) {
   
-    //Initialize the database
     DerbyDB db = new DerbyDB();
     db.checkDB();
 
@@ -38,8 +40,10 @@ public class NLPBot extends TelegramLongPollingBot {
 
     try {
       botsApi.registerBot(new NLPBot());
+      logger.info("Listening to Telegram conversations");
     } catch (TelegramApiException e) {
-      e.printStackTrace();
+      logger.debug("No connection to Telegram", e);
+      logger.error("No connection to Telegram - check the debug log for details");
     }
   }
 

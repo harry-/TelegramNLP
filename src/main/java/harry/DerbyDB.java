@@ -7,6 +7,8 @@ import java.sql.SQLException;
 import java.sql.Statement;
 import org.apache.logging.log4j.Logger;
 import org.apache.logging.log4j.LogManager;
+import java.util.List;
+import java.util.ArrayList;
 
 import java.time.LocalDate;
 
@@ -375,6 +377,77 @@ public class DerbyDB{
     }
     return rs;
 
+  }
+
+  /**
+   * Retrieve types from the "entitysentiment" table
+   * @return all types like "Location" and "Work of Art" as a string array
+   */
+  public List<String> getTypes() {
+
+    logger.entry();
+    List<String> output = new ArrayList<String>();
+    ResultSet rs = query("select distinct type from entitysentiment");
+
+
+    try {
+      while (rs.next()) 
+        output.add(rs.getString("type"));
+
+       
+    } catch (SQLException e) {
+      logger.error(e.getMessage());
+      logger.debug(e.getStackTrace());
+    }
+    return output;
+  }
+
+  /**
+   * Retrieve types from the "entitysentiment" table for a given user
+   * @param   username
+   * @return  all types like "Location" and "Work of Art" as a string array
+   */
+  public List<String> getTypes(String username) {
+
+    logger.entry(username);
+    Long userid = getUserId(username);
+
+    List<String> output = new ArrayList<String>();
+    ResultSet rs = query("select distinct type from entitysentiment where userid = "+userid);
+
+    try {
+      while (rs.next()) 
+        output.add(rs.getString("type"));
+
+       
+    } catch (SQLException e) {
+      logger.error(e.getMessage());
+      logger.debug("oh no!", e);
+    }
+    return logger.exit(output);
+  }
+
+  /**
+   * Send an sql query to the db
+   * @param   sql   the query
+   * @return        the resultset
+   */
+  public ResultSet query(String sql) {
+
+    logger.entry(sql);
+    ResultSet rs = null;
+
+    try {
+      Connection conn = connectionToDerby();
+      Statement stmt = conn.createStatement();
+
+      rs = stmt.executeQuery(sql);
+  
+    } catch (SQLException e) {
+      logger.error(e.getMessage());
+      logger.debug(e.getStackTrace());
+    }
+    return rs;
   }
 
 }

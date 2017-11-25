@@ -1,8 +1,16 @@
 package harry;
 
 import com.j256.ormlite.dao.Dao;
+import harry.DerbyDB;
+import java.util.List;
+import java.util.Random;
+import java.util.Collections;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 
 public class Report extends Command {
+
+	Logger logger = LogManager.getLogger();
 
 	private String help = "Displays the nlp report of a given user.\nExample: report harry";
 
@@ -27,11 +35,22 @@ public class Report extends Command {
 
 		String report = "This will be the report.";
 
+		List<String> types = new DerbyDB().getTypes(handle);
+		types.remove("OTHER");
+		logger.debug(types.toString());
+		Collections.shuffle(types);
+		logger.debug(types.toString());
+		String[] arrayTypes = types.toArray( new String[]{} );
+
+
+
 		report = 	capitalize(entitySentiment(handle)) +
-							favWord(handle) +
-							favInCategory (handle, "LOCATION") +
-							" and "+uncapitalize(favInCategory(handle, "PERSON"))+". " +
-							mood(handle);	
+			favWord(handle);
+
+		if (arrayTypes.length>1) 
+			report +=	favInCategory (handle, arrayTypes[0]) +	" and "+uncapitalize(favInCategory(handle, arrayTypes[1]))+". ";
+		
+		report+=mood(handle);	
 
 		return report;
 	}
@@ -104,7 +123,9 @@ public class Report extends Command {
 				xdislike = "Her";
 		}
 
-    report = xdislike+" favourite "+category.toLowerCase()+" is "+fav[0];
+
+
+    report = xdislike+" favourite "+category.toLowerCase().replace('_', ' ')+" is "+fav[0];
 
 		return report;
 	}

@@ -22,11 +22,14 @@ public class Listener {
 
   public static void theCloudListens(long userID, String text) {
 
+    logger.entry(userID, text);
+
     GoogleCloud cloud = new GoogleCloud();
     DerbyDB db = new DerbyDB();
 
     LocalDateTime currentTime = LocalDateTime.now();
     LocalDate date = currentTime.toLocalDate();
+    logger.info(date+": "+text);
 
     List<Entity> entities = cloud.getEntSent2(text);
 
@@ -37,9 +40,6 @@ public class Listener {
       answer += ", Magnitude: " + entity.getSentiment().getMagnitude();
       answer += ", Type: " + entity.getType().name();
 
-      logger.debug(answer);
-      logger.info(date+": "+text);
-
       db.storeAnalysis(userID,
         entity.getName(),
         entity.getSalience(), 
@@ -47,6 +47,7 @@ public class Listener {
         entity.getSentiment().getScore(), 
         date, "",
         entity.getType().name());
+      logger.exit(answer);
     }
   }
   public static void theCloudListensToSentiments(long userID, String text, LocalDate date) {
