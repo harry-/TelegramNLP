@@ -38,6 +38,7 @@ public class Listener {
       answer += ", Type: " + entity.getType().name();
 
       logger.debug(answer);
+      logger.info(date+": "+text);
 
       db.storeAnalysis(userID,
         entity.getName(),

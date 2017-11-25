@@ -58,7 +58,7 @@ public class AddTwitterUser extends Command {
         logger.debug(status.getUser().getName() + ":" +
                              status.getText());
 https://stackoverflow.com/questions/21242110/convert-java-util-date-to-java-time-localdate
-        logger.info(status.getCreatedAt().toString());
+        logger.info(status.getCreatedAt().toString() +": "+status.getText());
 
         //https://stackoverflow.com/questions/21242110/convert-java-util-date-to-java-time-localdate
         Listener.theCloudListensToSentiments(tuser.getId(), status.getText(),status.getCreatedAt().toInstant().atZone(ZoneId.systemDefault()).toLocalDate());

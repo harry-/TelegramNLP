@@ -3,16 +3,16 @@ package harry;
 import org.telegram.telegrambots.api.methods.send.SendMessage;
 import org.telegram.telegrambots.api.objects.Message;
 import org.telegram.telegrambots.api.objects.Update;
+import org.telegram.telegrambots.api.methods.send.SendPhoto;
 import org.telegram.telegrambots.api.objects.replykeyboard.ForceReplyKeyboard;
 import org.telegram.telegrambots.api.objects.replykeyboard.ReplyKeyboardMarkup;
 import org.telegram.telegrambots.bots.TelegramLongPollingBot;
 import org.telegram.telegrambots.exceptions.TelegramApiException;
-
 import org.telegram.telegrambots.ApiContextInitializer;
 import org.telegram.telegrambots.TelegramBotsApi;
-
 import org.telegram.telegrambots.logging.BotsFileHandler;
 
+import java.io.File;
 import java.io.InvalidObjectException;
 import java.util.concurrent.ConcurrentHashMap;
 
@@ -52,19 +52,26 @@ public class NLPBot extends TelegramLongPollingBot {
 
       DerbyDB db = new DerbyDB();
 
-      String output = new CommandHandler().all( update.getMessage().getText(), 
-                                                mode, 
-                                                update.getMessage().getFrom().getUserName(),
-                                                update.getMessage().getChat().isUserChat(), 
-                                                update.getMessage().getFrom().getId(), 
-                                                update.getMessage().getFrom().getFirstName());
+      String output = new CommandHandler().all( 
+        update.getMessage().getText(), 
+        mode, 
+        update.getMessage().getFrom().getUserName(),
+        update.getMessage().getChat().isUserChat(), 
+        update.getMessage().getFrom().getId(), 
+        update.getMessage().getFrom().getFirstName()  );
+
       try {
+
+        if (output.startsWith("photo"))
+        {
+          sendImageUploadingAFile("./pic.png", Long.toString(update.getMessage().getChatId()));
+        }
 
         SendMessage message = new SendMessage();// Create a SendMessage object with mandatory fields
         message.setChatId(update.getMessage().getChatId());
         message.setText(output);
 
-        if (message.getText() != null && !message.getText().isEmpty())
+        if (message.getText() != null && !message.getText().isEmpty() && !message.getText().startsWith("photo"))
           sendMessage(message); // Call method to send the message
 
       } catch (TelegramApiException e) {
@@ -74,6 +81,21 @@ public class NLPBot extends TelegramLongPollingBot {
       }
     }
   }
+
+  public void sendImageUploadingAFile(String filePath, String chatId) {
+      // Create send method
+      SendPhoto sendPhotoRequest = new SendPhoto();
+      // Set destination chat id
+      sendPhotoRequest.setChatId(chatId);
+      // Set the photo file as a new photo (You can also use InputStream with a method overload)
+      sendPhotoRequest.setNewPhoto(new File(filePath));
+      try {
+          // Execute the method
+          sendPhoto(sendPhotoRequest);
+      } catch (TelegramApiException e) {
+          e.printStackTrace();
+      }
+    }
 
   //import bot credentials from environment variables
 
