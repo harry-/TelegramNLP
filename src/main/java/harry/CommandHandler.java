@@ -50,6 +50,9 @@ public class CommandHandler {
     else if (command.startsWith("chart")) 
       output = new MoodChart(command).run();    
 
+    else if (command.startsWith("category report")) 
+      output = new CategoryReport(command).run();    
+
     else if (command.equals("get types"))
       output = db.getTypes().toString();
   

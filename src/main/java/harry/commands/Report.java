@@ -45,7 +45,7 @@ public class Report extends Command {
 
 
 		report = 	capitalize(entitySentiment(handle)) +
-			favWord(handle);
+				favWord(handle);
 
 		if (arrayTypes.length>1) 
 			report +=	favInCategory (handle, arrayTypes[0]) +	" and "+uncapitalize(favInCategory(handle, arrayTypes[1]))+". ";
