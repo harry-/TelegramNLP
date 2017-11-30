@@ -58,12 +58,12 @@ public class AddTwitterUser extends Command {
         logger.debug(status.getUser().getName() + ":" +
                              status.getText());
 https://stackoverflow.com/questions/21242110/convert-java-util-date-to-java-time-localdate
-        logger.info(status.getCreatedAt().toString() +": "+status.getText());
+        logger.info(status.getCreatedAt().toString() +": "+status.getText()); 
 
         //https://stackoverflow.com/questions/21242110/convert-java-util-date-to-java-time-localdate
-        Listener.theCloudListensToSentiments(tuser.getId(), status.getText(),status.getCreatedAt().toInstant().atZone(ZoneId.systemDefault()).toLocalDate());
+        Listener.theCloudListensToSentiments(tuser.getId(), status.getText(),status.getCreatedAt().toInstant().atZone(ZoneId.systemDefault()).toLocalDate(), status.getId());
 
-        Listener.theCloudListens(tuser.getId(), status.getText());     
+        Listener.theCloudListens(tuser.getId(), status.getText(), status.getId());     
       }
 
       output += statuses.size() + " of "+tuser.getScreenName()+"'s tweets have been analyzed.";

@@ -68,13 +68,13 @@ public class DerbyDB{
   }
 
 
-  public void storeAnalysis(long userid, String entity, double salience, double magnitude, double score, LocalDate date, String metadata, String type) {
+  public void storeAnalysis(long userid, String entity, double salience, double magnitude, double score, LocalDate date, String metadata, String type, long messageID) {
     try {
       Connection conn = connectionToDerby();
 
       Statement stmt = conn.createStatement();
    
-      String sql = "insert into entitysentiment (userid, entity, salience, magnitude, score, date, metadata, type) values ("+userid+", '"+entity+"', "+salience+", "+magnitude+", "+score+", '"+date+"', '"+metadata+"', '"+type+"')";
+      String sql = "insert into entitysentiment (userid, entity, salience, magnitude, score, date, metadata, type, messageid) values ("+userid+", '"+entity+"', "+salience+", "+magnitude+", "+score+", '"+date+"', '"+metadata+"', '"+type+"', "+messageID+")";
       logger.debug(sql);
 
       stmt.executeUpdate(sql);
@@ -88,12 +88,12 @@ public class DerbyDB{
   }
 
 
-  public void storeSentiment(long userid, double magnitude, double score, LocalDate date) {
+  public void storeSentiment(long userid, double magnitude, double score, LocalDate date, long messageID) {
     try {
       Connection conn = connectionToDerby();
       Statement stmt = conn.createStatement();
 
-      String sql = "insert into sentiment (userid, magnitude, score, date) values ("+userid+", "+magnitude+", "+score+", '"+date+"')";
+      String sql = "insert into sentiment (userid, magnitude, score, date, messageid) values ("+userid+", "+magnitude+", "+score+", '"+date+"', "+messageID+")";
 
       logger.debug(sql);
 
@@ -279,8 +279,8 @@ public class DerbyDB{
  */
   public void initializeTables() {
     createTable("CREATE TABLE Telegramuser (Userid bigint, Firstname varchar(40), Secondname varchar(40), Handle varchar(40), Gender varchar(10))");
-    createTable("create table sentiment (index INTEGER NOT NULL GENERATED ALWAYS AS IDENTITY (START WITH 1, INCREMENT BY 1), userid bigint, magnitude double, score double, date date)");
-    createTable("create table entitysentiment (index INTEGER NOT NULL GENERATED ALWAYS AS IDENTITY (START WITH 1, INCREMENT BY 1), userid bigint, entity varchar(100), salience double, magnitude double, score double, date date, metadata varchar(100), type varchar(40))");
+    createTable("create table sentiment (index INTEGER NOT NULL GENERATED ALWAYS AS IDENTITY (START WITH 1, INCREMENT BY 1), userid bigint, magnitude double, score double, date date), messageid bigint");
+    createTable("create table entitysentiment (index INTEGER NOT NULL GENERATED ALWAYS AS IDENTITY (START WITH 1, INCREMENT BY 1), userid bigint, entity varchar(100), salience double, magnitude double, score double, date date, metadata varchar(100), type varchar(40)), messageid bigint");
     logger.info("Tables created");
   }
 

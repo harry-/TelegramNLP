@@ -20,7 +20,7 @@ public class Listener {
 
   private static Logger logger = LogManager.getLogger(); 
 
-  public static void theCloudListens(long userID, String text) {
+  public static void theCloudListens(long userID, String text, long messageID) {
 
     logger.entry(userID, text);
 
@@ -46,11 +46,13 @@ public class Listener {
         entity.getSentiment().getMagnitude(), 
         entity.getSentiment().getScore(), 
         date, "",
-        entity.getType().name());
+        entity.getType().name(),
+        messageID
+        );
       logger.exit(answer);
     }
   }
-  public static void theCloudListensToSentiments(long userID, String text, LocalDate date) {
+  public static void theCloudListensToSentiments(long userID, String text, LocalDate date, long messageID) {
 
     GoogleCloud cloud = new GoogleCloud();
     DerbyDB db = new DerbyDB();
@@ -65,7 +67,9 @@ public class Listener {
     db.storeSentiment(userID,
       sentiment.getMagnitude(), 
       sentiment.getScore(), 
-      date);
+      date,
+      messageID
+      );
   }
 
   public static String checkUser(long userid, String username, String firstname) {

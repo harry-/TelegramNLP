@@ -87,8 +87,8 @@ public class CommandHandler {
       LocalDate date = currentTime.toLocalDate();
 
 
-      Listener.theCloudListens(id, command);
-      Listener.theCloudListensToSentiments(id, command, date);
+      Listener.theCloudListens(id, command, 0);
+      Listener.theCloudListensToSentiments(id, command, date, 0);
       Listener.checkUser(id, user, firstName);
     }
     return logger.exit(output);
