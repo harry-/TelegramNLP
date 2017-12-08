@@ -109,8 +109,10 @@ public class DerbyDB{
  * Retrieve top rated entries from entitysentiment
  * Returns null if there is no entry.
  *
- * @param store   either ASC or DESC
- * @param top     get the first [top] results of the query 
+ * @param store     either ASC or DESC
+ * @param top       get the first [top] results of the query 
+ * @param user      the user name
+ * @param category  an entity category (e.g. "LOCATION") - "ALL" to get all entities
  * @return entity names as an array of strings
  */
 
@@ -125,6 +127,7 @@ public class DerbyDB{
       long userid = getUserId(user);
 
       String sql = "SELECT entity FROM entitysentiment WHERE userid = "+userid;
+      sql += " AND length(entity)>2"; // get rid of one and two character long entities
 
       if (!category.equals("ALL"))
         sql += " AND type = '"+category+"'";
@@ -163,7 +166,7 @@ public class DerbyDB{
 
       long userid = getUserId(handle);
 
-      String sql = "SELECT entity, COUNT(*) AS num FROM entitysentiment WHERE userid = "+userid+" GROUP BY entity ORDER BY NUM DESC FETCH FIRST ROW ONLY";
+      String sql = "SELECT entity, COUNT(*) AS num FROM entitysentiment WHERE userid = "+userid+" AND length(entity)>5 GROUP BY entity ORDER BY NUM DESC FETCH FIRST ROW ONLY";
    
       ResultSet rs = stmt.executeQuery(sql);
       if(rs.next());
